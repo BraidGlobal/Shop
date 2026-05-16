@@ -1,0 +1,1251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#18172C" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Build Braid — Shop (Connected Flow)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/tabler-icons.min.css" />
+  <style>
+    :root {
+      --deep-indigo: #18172C;
+      --medium-purple: #302A4D;
+      --dark-purple: #221E3C;
+      --pure-white: #FFFEFE;
+      --soft-lilac: #E2C5FF;
+      --lavender: #C8BCF6;
+      --deep-violet: #5A199B;
+      --purple-border: #9F75C7;
+      --amber-orange: #FF9D33;
+
+      --font-display: 'Sora', 'Inter', system-ui, sans-serif; /* Gyst Variable fallback */
+      --font-body: 'Roboto', system-ui, sans-serif;
+      --font-ui: 'Inter', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font-body);
+      background: var(--deep-indigo);
+      color: var(--pure-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px 16px 48px;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    body::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 40%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(199, 188, 246, 0.05), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hint {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(226, 197, 255, 0.5);
+      text-align: center;
+      max-width: 90%;
+      z-index: 1;
+    }
+
+    /* ============ Device ============ */
+    .device {
+      width: 380px;
+      height: 820px;
+      background: #f8f8f8;
+      border-radius: 56px;
+      padding: 12px;
+      box-shadow:
+        0 50px 100px -20px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+    .device::after {
+      content: '';
+      position: absolute;
+      left: 10%; right: 10%;
+      bottom: -70px;
+      height: 70px;
+      background: linear-gradient(to bottom, rgba(248, 248, 248, 0.18), transparent);
+      filter: blur(10px);
+      transform: scaleY(-1);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 44px;
+      overflow: hidden;
+      position: relative;
+      background: var(--deep-indigo);
+    }
+
+    #scroll-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      scroll-snap-type: y mandatory;
+    }
+    #scroll-container.snap-off { scroll-snap-type: none; }
+    #scroll-container::-webkit-scrollbar { display: none; }
+
+    #hero-section,
+    .grid-state {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    /* ============ Status bar (sticky over everything) ============ */
+    .status-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      padding: 14px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--pure-white);
+      z-index: 50;
+      pointer-events: none;
+    }
+    .status-bar .right { display: flex; align-items: center; gap: 5px; }
+    .status-bar i { font-size: 14px; }
+
+    /* ============ STATE 01: Reels Hero ============ */
+    #hero-section {
+      width: 100%;
+      height: 820px;
+      position: relative;
+      background: var(--medium-purple);
+      overflow: hidden;
+    }
+
+    #reels-track {
+      display: flex;
+      width: 400%;
+      height: 100%;
+      transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reel-slide {
+      width: 25%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-color: var(--medium-purple);
+      position: relative;
+    }
+
+    /* Readability gradient overlay */
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(24,23,44,0.55) 0%, rgba(24,23,44,0.05) 22%, rgba(24,23,44,0.1) 55%, rgba(24,23,44,0.85) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Carousel progress */
+    .progress {
+      position: absolute;
+      top: 56px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      gap: 4px;
+      z-index: 6;
+    }
+    .progress-seg {
+      flex: 1;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: var(--soft-lilac);
+      border-radius: 999px;
+    }
+
+    /* Top nav over reels */
+    .reels-nav {
+      position: absolute;
+      top: 80px;
+      left: 0; right: 0;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 6;
+    }
+    .glass-circle {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(226, 197, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .glass-circle:active { background: rgba(255, 255, 255, 0.22); }
+
+    /* Glass-pill brand badge (wider, holds the wordmark) */
+    .glass-pill {
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(226, 197, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .glass-pill:active { background: rgba(255, 255, 255, 0.22); }
+
+    .brand-logo {
+      height: 46px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.35));
+    }
+    .brand-logo-sm { height: 42px; }
+
+    .logo-b {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--soft-lilac);
+      letter-spacing: -0.02em;
+    }
+    .cart-btn i { color: var(--soft-lilac); font-size: 20px; }
+    .cart-dot {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 8px; height: 8px;
+      background: var(--deep-violet);
+      border-radius: 50%;
+      border: 1.5px solid var(--deep-indigo);
+      display: none;
+    }
+    .cart-dot.visible { display: block; }
+
+    /* Tap zones */
+    #touch-zone {
+      position: absolute;
+      top: 130px;
+      left: 0; right: 0;
+      bottom: 240px;
+      display: flex;
+      z-index: 4;
+    }
+    #tap-left, #tap-right { flex: 1; cursor: pointer; }
+
+    /* Hero text */
+    .hero-text {
+      position: absolute;
+      left: 32px;
+      bottom: 140px;
+      max-width: 260px;
+      z-index: 5;
+    }
+    .live-dot {
+      position: relative;
+      width: 16px; height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .live-dot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--soft-lilac);
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: pulse 2.4s infinite ease-out;
+    }
+    .live-dot::after {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--soft-lilac);
+      border-radius: 50%;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      80% { transform: scale(1.9); opacity: 0; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+    .display-headline {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 42px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--pure-white);
+      margin: 0 0 10px;
+    }
+    .subline {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 1.45;
+      color: rgba(255, 254, 254, 0.75);
+      margin: 0;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      position: absolute;
+      right: 32px;
+      bottom: 158px;
+      width: 24px;
+      height: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 5;
+      cursor: pointer;
+    }
+    .hamburger span {
+      display: block;
+      height: 1.5px;
+      background: var(--soft-lilac);
+      border-radius: 2px;
+    }
+    .hamburger span:nth-child(2) { width: 65%; align-self: flex-end; }
+
+    /* Scroll affordance */
+    #scroll-cue {
+      position: absolute;
+      bottom: 56px;
+      left: 0; right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 5;
+      animation: bounce 2.2s ease-in-out infinite;
+      transition: opacity 0.3s;
+      cursor: pointer;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+    #scroll-cue .label {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: rgba(255, 254, 254, 0.7);
+    }
+    #scroll-cue i { color: var(--soft-lilac); font-size: 18px; }
+
+    /* ============ STATE 02: Sticky bar + Grid ============ */
+    .grid-state {
+      background: var(--deep-indigo);
+      min-height: 820px;
+      padding-bottom: 56px;
+    }
+
+    .sticky-bar {
+      position: sticky;
+      top: 0;
+      background: rgba(24, 23, 44, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(159, 117, 199, 0.25);
+      padding: 56px 20px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+    }
+    .sticky-bar .logo-b-sm {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 1px solid var(--soft-lilac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--soft-lilac);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .sticky-bar h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--pure-white);
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    .cart-grid-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid rgba(226, 197, 255, 0.45);
+      color: var(--soft-lilac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .cart-grid-btn i { font-size: 16px; }
+    .cart-grid-btn .cart-dot { top: 0; right: 0; }
+
+    /* Grid heading */
+    .grid-intro {
+      padding: 22px 16px 8px;
+    }
+    .grid-intro h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: -0.02em;
+      color: var(--pure-white);
+      margin: 0 0 4px;
+    }
+    .grid-intro p {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      color: rgba(255, 254, 254, 0.6);
+      margin: 0;
+    }
+
+    #product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 12px;
+      padding: 16px;
+    }
+
+    .product-card {
+      position: relative;
+      background:
+        linear-gradient(160deg,
+          rgba(226, 197, 255, 0.14) 0%,
+          rgba(48, 42, 77, 0.55) 35%,
+          rgba(34, 30, 60, 0.6) 100%);
+      border: 1px solid rgba(226, 197, 255, 0.22);
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      box-shadow:
+        0 14px 38px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Subtle top sheen for a glass-surface highlight */
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.07) 0%,
+        transparent 100%);
+      pointer-events: none;
+      z-index: 3;
+      border-radius: inherit;
+      mix-blend-mode: screen;
+    }
+    .product-card:active { transform: scale(0.97); }
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(226, 197, 255, 0.5);
+      box-shadow:
+        0 22px 48px rgba(0, 0, 0, 0.5),
+        0 6px 20px rgba(90, 25, 155, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .product-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background-size: cover;
+      background-position: center;
+      background-color: var(--dark-purple);
+    }
+    .product-body { padding: 12px; }
+    .product-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--pure-white);
+      letter-spacing: -0.01em;
+      margin: 0 0 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .product-price {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 15px;
+      color: var(--soft-lilac);
+      margin: 0 0 10px;
+    }
+    .add-btn {
+      width: 100%;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--deep-violet);
+      color: var(--pure-white);
+      border: none;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .add-btn:hover {
+      background: #6B25B0;
+      box-shadow: 0 0 0 1px var(--lavender), 0 0 16px rgba(200, 188, 246, 0.4);
+    }
+    .add-btn:active { transform: scale(0.96); }
+    .add-btn.added { background: #2D7A4F; }
+
+    /* Scroll dots at end of grid */
+    .scroll-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      padding: 16px 0 0;
+    }
+    .scroll-dots span {
+      width: 4px; height: 4px;
+      background: var(--soft-lilac);
+      border-radius: 50%;
+    }
+    .scroll-dots span:nth-child(1) { opacity: 0.7; }
+    .scroll-dots span:nth-child(2) { opacity: 0.5; }
+    .scroll-dots span:nth-child(3) { opacity: 0.3; }
+
+    /* Home indicator */
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--pure-white);
+      opacity: 0.85;
+      z-index: 60;
+      pointer-events: none;
+    }
+
+    /* ============ Toast ============ */
+    /* ============ Side Drawer ============ */
+    .drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 80;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 320ms ease;
+      border-radius: 44px;
+    }
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .drawer {
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 72%;
+      background: rgba(90, 25, 155, 0.6);
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      border-left: 1px solid rgba(226, 197, 255, 0.25);
+      box-shadow: -20px 0 50px rgba(0, 0, 0, 0.45);
+      z-index: 85;
+      transform: translateX(100%);
+      transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 56px 0 32px;
+      overflow: hidden;
+      border-top-right-radius: 44px;
+      border-bottom-right-radius: 44px;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 22px 22px;
+      border-bottom: 1px solid rgba(226, 197, 255, 0.18);
+    }
+    .drawer-header .brand-logo { height: 36px; }
+    .drawer-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(226, 197, 255, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--soft-lilac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .drawer-close:hover { background: rgba(255, 255, 255, 0.16); }
+    .drawer-close:active { transform: scale(0.94); }
+    .drawer-close i { font-size: 18px; }
+    .drawer-nav { display: flex; flex-direction: column; }
+    .drawer-item {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(226, 197, 255, 0.15);
+      padding: 22px 24px;
+      color: var(--pure-white);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-align: left;
+      transition: background 200ms, padding-left 200ms;
+    }
+    .drawer-item:hover { background: rgba(226, 197, 255, 0.08); padding-left: 28px; }
+    .drawer-item:active { background: rgba(226, 197, 255, 0.18); }
+    .drawer-item i { color: var(--soft-lilac); font-size: 18px; opacity: 0.8; }
+    .drawer-footer {
+      margin-top: auto;
+      padding: 24px 24px 8px;
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 254, 254, 0.5);
+    }
+
+    /* ============ Floating Cart FAB ============ */
+    .cart-fab {
+      position: absolute;
+      bottom: 32px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--deep-violet);
+      color: var(--pure-white);
+      border: 1px solid rgba(226, 197, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 50;
+      box-shadow:
+        0 12px 32px rgba(90, 25, 155, 0.5),
+        0 0 0 6px rgba(90, 25, 155, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transform: scale(0) translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 280ms ease,
+        box-shadow 200ms ease;
+    }
+    .cart-fab.visible {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .cart-fab:hover {
+      background: var(--deep-violet-hover, #6B25B0);
+      box-shadow:
+        0 16px 38px rgba(90, 25, 155, 0.6),
+        0 0 0 8px rgba(90, 25, 155, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+    .cart-fab:active.visible { transform: scale(0.94); }
+    .cart-fab i { font-size: 24px; }
+    .cart-fab-badge {
+      position: absolute;
+      top: -2px; right: -2px;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: var(--soft-lilac);
+      color: var(--deep-indigo);
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--deep-indigo);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+    /* tiny pulse when count changes */
+    @keyframes fab-bump {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+    .cart-fab.bump { animation: fab-bump 380ms ease; }
+
+    .toast {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--soft-lilac);
+      color: var(--deep-indigo);
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 10px 18px;
+      border-radius: 999px;
+      z-index: 55;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      white-space: nowrap;
+    }
+    .toast i { font-size: 14px; }
+
+    /* ============ Mobile (real device) ============ */
+    @media (max-width: 460px) {
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        padding: 0;
+        gap: 0;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow: hidden;
+      }
+      body::after { display: none; }
+      .device {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100dvh;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      .device::after { display: none; }
+      .screen { border-radius: 0; }
+      .hint { display: none; }
+
+      /* Hide the fake iPhone chrome on real devices (OS provides it) */
+      .status-bar { display: none; }
+      .home-indicator { display: none; }
+
+      /* Hero section fills the real viewport */
+      #hero-section { height: 100vh; height: 100dvh; }
+      .grid-state { min-height: 100vh; min-height: 100dvh; }
+
+      /* Top nav uses real safe area instead of fake status bar */
+      .reels-nav { top: max(20px, env(safe-area-inset-top)); }
+      .progress { top: max(8px, calc(env(safe-area-inset-top) - 4px)); }
+      .sticky-bar {
+        padding-top: max(20px, env(safe-area-inset-top));
+        height: auto;
+        min-height: 64px;
+        padding-bottom: 12px;
+      }
+      .sticky-bar .center-title { top: auto; bottom: 14px; transform: translateX(-50%); }
+
+      /* Cart FAB lifts above the home-indicator gesture area */
+      .cart-fab {
+        bottom: max(28px, calc(env(safe-area-inset-bottom) + 18px));
+      }
+
+      /* Drawer corners flush with screen edges on mobile */
+      .drawer { border-radius: 0; }
+      .drawer-backdrop { border-radius: 0; }
+
+      /* Scale headline on very wide-but-short phones via clamp */
+      .display-headline { font-size: clamp(34px, 11vw, 46px); }
+    }
+
+    /* Tiny phones (≤360px width: SE 1st-gen, small Androids) */
+    @media (max-width: 360px) {
+      .display-headline { font-size: 30px; }
+      .hero-text { left: 24px; bottom: 120px; max-width: 220px; }
+      .product-grid { padding: 14px; gap: 14px 10px; }
+      .product-card { border-radius: 16px; }
+      .card-name { font-size: 13px; }
+      .card-price { font-size: 14px; }
+      .reels-nav { padding: 0 16px; }
+      .drawer { width: 82%; }
+      .drawer-item { font-size: 18px; padding: 20px 22px; }
+    }
+
+    /* Landscape orientation: shrink hero text so it stays in frame */
+    @media (max-width: 900px) and (orientation: landscape) {
+      .display-headline { font-size: 32px; }
+      .hero-text { bottom: 80px; max-width: 60%; }
+      #scroll-cue { bottom: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hint">Connected flow · tap any product card to view detail · cart count syncs across pages</div>
+
+  <div class="device">
+    <div class="screen">
+
+      <!-- Status bar (over everything) -->
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="right">
+          <i class="ti ti-antenna-bars-5"></i>
+          <i class="ti ti-wifi"></i>
+          <i class="ti ti-battery-3"></i>
+        </div>
+      </div>
+
+      <div id="scroll-container">
+
+        <!-- ============ STATE 01: REELS HERO ============ -->
+        <section id="hero-section">
+
+          <div id="reels-track">
+            <div class="reel-slide" style="background-image: url('assets/hero-01.jpg');"></div>
+            <div class="reel-slide" style="background-image: url('assets/hero-02.jpg');"></div>
+            <div class="reel-slide" style="background-image: url('assets/hero-03.jpg');"></div>
+            <div class="reel-slide" style="background-image: url('assets/hero-04.jpg');"></div>
+          </div>
+
+          <div class="hero-scrim"></div>
+
+          <!-- Progress -->
+          <div class="progress">
+            <div class="progress-seg" data-idx="0"><div class="progress-fill"></div></div>
+            <div class="progress-seg" data-idx="1"><div class="progress-fill"></div></div>
+            <div class="progress-seg" data-idx="2"><div class="progress-fill"></div></div>
+            <div class="progress-seg" data-idx="3"><div class="progress-fill"></div></div>
+          </div>
+
+          <!-- Top nav -->
+          <div class="reels-nav">
+            <div class="glass-pill" aria-label="Braid">
+              <img class="brand-logo" src="assets/braid-logo.png" alt="Braid" />
+            </div>
+            <div class="glass-circle menu-btn" id="menu-btn-hero" aria-label="Menu">
+              <i class="ti ti-menu-2"></i>
+            </div>
+          </div>
+
+          <!-- Tap zones -->
+          <div id="touch-zone">
+            <div id="tap-left"></div>
+            <div id="tap-right"></div>
+          </div>
+
+          <!-- Hero text -->
+          <div class="hero-text">
+            <div class="live-dot"></div>
+            <h1 class="display-headline">Crafted<br/>for You</h1>
+            <p class="subline">Heirloom charm keychains</p>
+          </div>
+
+          <!-- Scroll cue -->
+          <div id="scroll-cue">
+            <span class="label">SHOP ALL</span>
+            <i class="ti ti-chevron-down"></i>
+          </div>
+        </section>
+
+        <!-- ============ STATE 02: GRID ============ -->
+        <section class="grid-state">
+
+          <div class="sticky-bar">
+            <img class="brand-logo brand-logo-sm" src="assets/braid-logo.png" alt="Braid" />
+            <h2>Shop all</h2>
+            <button class="cart-grid-btn" id="menu-btn-grid" aria-label="Menu">
+              <i class="ti ti-menu-2"></i>
+            </button>
+          </div>
+
+          <div class="grid-intro">
+            <h1>Shop all</h1>
+            <p>Stickers, scarves &amp; studio essentials</p>
+          </div>
+
+          <div id="product-grid"></div>
+
+          <div class="scroll-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Side drawer + backdrop -->
+      <div class="drawer-backdrop" id="drawer-backdrop"></div>
+      <aside class="drawer" id="drawer" aria-hidden="true">
+        <div class="drawer-header">
+          <img class="brand-logo" src="assets/braid-logo.png" alt="Braid" />
+          <button class="drawer-close" id="drawer-close" aria-label="Close menu">
+            <i class="ti ti-x"></i>
+          </button>
+        </div>
+        <nav class="drawer-nav">
+          <button class="drawer-item" data-action="about">
+            <span>About</span>
+            <i class="ti ti-chevron-right"></i>
+          </button>
+          <button class="drawer-item" data-action="cart">
+            <span>Cart</span>
+            <i class="ti ti-chevron-right"></i>
+          </button>
+          <button class="drawer-item" data-action="shipping">
+            <span>Shipping Policy</span>
+            <i class="ti ti-chevron-right"></i>
+          </button>
+        </nav>
+        <div class="drawer-footer">Braid · Hair care, curated</div>
+      </aside>
+
+      <!-- Floating cart FAB (only when items in cart) -->
+      <button class="cart-fab" id="cart-fab" aria-label="View cart">
+        <i class="ti ti-shopping-cart"></i>
+        <span class="cart-fab-badge" id="cart-fab-badge">0</span>
+      </button>
+
+      <!-- Home indicator -->
+      <div class="home-indicator"></div>
+
+      <!-- Toast -->
+      <div class="toast" id="toast">
+        <i class="ti ti-check"></i>
+        <span id="toast-msg">Added to cart</span>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+(function() {
+  // ============ Products ============
+  const products = [
+    { name: 'Silk Scarf',       price: 38, img: 'assets/silk-scarf.jpg' },
+    { name: 'Charm Keychain',   price: 24, img: 'assets/keychain.jpg' },
+    { name: 'Satin Scrunchie',  price: 14, img: 'assets/satin-scrunchie.jpg' },
+    { name: 'Sticker Sheet',    price: 12, img: 'assets/sticker-sheet.jpg' },
+    { name: 'B Mark',           price: 4,  img: 'assets/b-mark.jpg' },
+    { name: 'Star Boy',         price: 5,  img: 'assets/star-boy.jpg' },
+    { name: 'Star Girl',        price: 5,  img: 'assets/star-girl.jpg' },
+    { name: 'No Bad Hair Days', price: 4,  img: 'assets/no-bad-hair-days.jpg' },
+    { name: 'Speak Up',         price: 5,  img: 'assets/speak-up.jpg' }
+  ];
+
+  const grid = document.getElementById('product-grid');
+  products.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-img" style="background-image: url('${p.img}');"></div>
+      <div class="product-body">
+        <p class="product-name">${p.name}</p>
+        <p class="product-price">$${p.price}</p>
+        <button class="add-btn" data-idx="${i}"><i class="ti ti-plus" style="font-size: 14px;"></i>Add</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // ============ Cart state (shared via localStorage) ============
+  // Stored as { [productIdx: string]: qty }
+  const CART_KEY = 'braid_cart';
+  function readCart() {
+    try {
+      const raw = localStorage.getItem(CART_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : {};
+    } catch { return {}; }
+  }
+  function writeCart(cart) {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch {}
+  }
+  function addToCart(idx, qty) {
+    const cart = readCart();
+    const key = String(idx);
+    cart[key] = (cart[key] || 0) + qty;
+    writeCart(cart);
+    return cart;
+  }
+  function getCartCount() {
+    return Object.values(readCart()).reduce((s, q) => s + (q || 0), 0);
+  }
+  function cartSummary() {
+    const cart = readCart();
+    const entries = Object.entries(cart).filter(([, q]) => q > 0);
+    const total = entries.reduce((s, [, q]) => s + q, 0);
+    if (total === 0) return { total: 0, text: 'Cart is empty' };
+    const parts = entries.slice(0, 2).map(([k, q]) => {
+      const p = products[parseInt(k, 10)];
+      return p ? `${p.name} ×${q}` : `Item ${k} ×${q}`;
+    });
+    const extra = entries.length > 2 ? `, +${entries.length - 2} more` : '';
+    return { total, text: `${total} item${total > 1 ? 's' : ''} · ${parts.join(', ')}${extra}` };
+  }
+  let cartCount = getCartCount();
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toast-msg');
+  let toastTimer = null;
+
+  function showToast(msg) {
+    toastMsg.textContent = msg;
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.style.transform = 'translateX(-50%) translateY(100px)';
+    }, 1800);
+  }
+
+  const cartFab = document.getElementById('cart-fab');
+  const cartFabBadge = document.getElementById('cart-fab-badge');
+
+  function updateCartFab(animate = false) {
+    if (cartCount > 0) {
+      cartFabBadge.textContent = cartCount;
+      cartFab.classList.add('visible');
+      if (animate) {
+        cartFab.classList.remove('bump');
+        // force reflow so the animation restarts
+        void cartFab.offsetWidth;
+        cartFab.classList.add('bump');
+      }
+    } else {
+      cartFab.classList.remove('visible');
+    }
+  }
+
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.idx, 10);
+      const p = products[idx];
+      addToCart(idx, 1);
+      cartCount = getCartCount();
+      updateCartFab(true);
+      btn.classList.add('added');
+      btn.innerHTML = '<i class="ti ti-check" style="font-size: 14px;"></i>Added';
+      setTimeout(() => {
+        btn.classList.remove('added');
+        btn.innerHTML = '<i class="ti ti-plus" style="font-size: 14px;"></i>Add';
+      }, 1500);
+      showToast(`${p.name} · added`);
+    });
+  });
+
+  document.querySelectorAll('.product-card').forEach((card, i) => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.add-btn')) return;
+      window.location.href = `build-braid-flow-detail.html?idx=${i}`;
+    });
+  });
+
+  // ============ Side drawer ============
+  const drawer = document.getElementById('drawer');
+  const drawerBackdrop = document.getElementById('drawer-backdrop');
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawerBackdrop.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerBackdrop.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+  }
+  document.getElementById('menu-btn-hero').addEventListener('click', openDrawer);
+  document.getElementById('menu-btn-grid').addEventListener('click', openDrawer);
+  document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
+
+  document.querySelectorAll('.drawer-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const action = item.dataset.action;
+      closeDrawer();
+      setTimeout(() => {
+        if (action === 'cart') {
+          window.location.href = 'build-braid-flow-cart.html';
+        } else if (action === 'about') {
+          showToast('About Braid');
+        } else if (action === 'shipping') {
+          showToast('Shipping Policy');
+        }
+      }, 280);
+    });
+  });
+
+  // Floating cart FAB → open cart page
+  cartFab.addEventListener('click', () => {
+    window.location.href = 'build-braid-flow-cart.html';
+  });
+
+  // Reflect persisted cart on load (e.g., user came back from detail page)
+  updateCartFab();
+
+  // ============ Reels carousel ============
+  const track = document.getElementById('reels-track');
+  const segments = document.querySelectorAll('.progress-seg');
+  const fills = document.querySelectorAll('.progress-fill');
+  const slideCount = 4;
+  const slideDuration = 3000;
+  let currentSlide = 0;
+  let autoTimer = null;
+  let progressStart = null;
+  let progressFrame = null;
+  let paused = false;
+
+  function goToSlide(idx, restart = true) {
+    currentSlide = (idx + slideCount) % slideCount;
+    track.style.transform = `translateX(-${currentSlide * (100 / slideCount)}%)`;
+    fills.forEach((f, i) => {
+      if (i < currentSlide) f.style.width = '100%';
+      else f.style.width = '0%';
+    });
+    if (restart && !paused) startAutoAdvance();
+  }
+
+  function startAutoAdvance() {
+    clearTimeout(autoTimer);
+    cancelAnimationFrame(progressFrame);
+    progressStart = performance.now();
+    const fill = fills[currentSlide];
+    function step(now) {
+      const elapsed = now - progressStart;
+      const pct = Math.min(100, (elapsed / slideDuration) * 100);
+      fill.style.width = pct + '%';
+      if (pct < 100) progressFrame = requestAnimationFrame(step);
+    }
+    progressFrame = requestAnimationFrame(step);
+    autoTimer = setTimeout(() => goToSlide(currentSlide + 1), slideDuration);
+  }
+  function pauseCarousel() {
+    paused = true;
+    clearTimeout(autoTimer);
+    cancelAnimationFrame(progressFrame);
+    autoTimer = null;
+  }
+  function resumeCarousel() {
+    paused = false;
+    if (!autoTimer) startAutoAdvance();
+  }
+
+  document.getElementById('tap-left').addEventListener('click', () => goToSlide(currentSlide - 1));
+  document.getElementById('tap-right').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  segments.forEach((seg, i) => {
+    seg.addEventListener('click', (e) => { e.stopPropagation(); goToSlide(i); });
+  });
+
+  // Touch swipe
+  let touchStartX = null;
+  const heroSection = document.getElementById('hero-section');
+  heroSection.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  heroSection.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) goToSlide(currentSlide + (dx < 0 ? 1 : -1));
+    touchStartX = null;
+  });
+
+  // Scroll: pause carousel when in grid, hide scroll cue, toggle snap once in grid
+  const scrollContainer = document.getElementById('scroll-container');
+  const scrollCue = document.getElementById('scroll-cue');
+  const heroHeight = heroSection.offsetHeight; // 820px
+  scrollContainer.addEventListener('scroll', () => {
+    const y = scrollContainer.scrollTop;
+    scrollCue.style.opacity = y > 60 ? '0' : '1';
+    if (y > 600) pauseCarousel();
+    else resumeCarousel();
+
+    // Snap-mandatory between hero and grid start; free scroll within the grid
+    if (y >= heroHeight) {
+      scrollContainer.classList.add('snap-off');
+    } else if (y < heroHeight * 0.5) {
+      scrollContainer.classList.remove('snap-off');
+    }
+  });
+
+  scrollCue.addEventListener('click', () => {
+    scrollContainer.scrollTo({ top: 820, behavior: 'smooth' });
+  });
+
+  startAutoAdvance();
+})();
+</script>
+</body>
+</html>

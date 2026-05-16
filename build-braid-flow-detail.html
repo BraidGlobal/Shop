@@ -1,0 +1,1215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#18172C" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Build Braid — Product Detail (Connected Flow)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/tabler-icons.min.css" />
+  <style>
+    :root {
+      --deep-indigo: #18172C;
+      --medium-purple: #302A4D;
+      --dark-purple: #221E3C;
+      --pure-white: #FFFEFE;
+      --soft-lilac: #E2C5FF;
+      --lavender: #C8BCF6;
+      --deep-violet: #5A199B;
+      --deep-violet-hover: #6B25B0;
+      --purple-border: #9F75C7;
+      --amber-orange: #FF9D33;
+      --success-green: #2D7A4F;
+
+      --font-display: 'Sora', 'Inter', system-ui, sans-serif;
+      --font-body: 'Roboto', system-ui, sans-serif;
+      --font-ui: 'Inter', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--deep-indigo);
+      color: var(--pure-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px 16px 48px;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    body::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 40%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(199, 188, 246, 0.05), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hint {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(226, 197, 255, 0.5);
+      text-align: center;
+      max-width: 90%;
+      z-index: 1;
+    }
+
+    /* ============ Device ============ */
+    .device {
+      width: 380px;
+      height: 820px;
+      background: #f8f8f8;
+      border-radius: 56px;
+      padding: 12px;
+      box-shadow:
+        0 50px 100px -20px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+    .device::after {
+      content: '';
+      position: absolute;
+      left: 10%; right: 10%;
+      bottom: -70px;
+      height: 70px;
+      background: linear-gradient(to bottom, rgba(248, 248, 248, 0.18), transparent);
+      filter: blur(10px);
+      transform: scaleY(-1);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .screen {
+      width: 100%; height: 100%;
+      border-radius: 44px;
+      overflow: hidden;
+      position: relative;
+      background: var(--deep-indigo);
+    }
+
+    /* ============ Status bar ============ */
+    .status-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      padding: 14px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--pure-white);
+      z-index: 60;
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(24, 23, 44, 0.55), transparent);
+    }
+    .status-bar .right { display: flex; align-items: center; gap: 5px; }
+    .status-bar i { font-size: 14px; }
+
+    /* ============ Scroll Container ============ */
+    #scroll-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 88px; /* space for sticky bottom bar */
+    }
+    #scroll-container::-webkit-scrollbar { display: none; }
+
+    /* ============ Top Nav (Zone 1) ============ */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      height: 104px; /* 44 status + 60 nav */
+      padding: 44px 20px 0;
+      background: rgba(24, 23, 44, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(159, 117, 199, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 40;
+    }
+    .nav-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid rgba(226, 197, 255, 0.4);
+      color: var(--soft-lilac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .nav-btn:hover { border-color: rgba(226, 197, 255, 0.8); background: rgba(255, 255, 255, 0.04); }
+    .nav-btn:active { transform: scale(0.94); }
+    .nav-btn i { font-size: 16px; }
+    .breadcrumb {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.09em;
+      color: rgba(255, 254, 254, 0.6);
+    }
+    .cart-dot {
+      position: absolute;
+      top: -1px; right: -1px;
+      width: 6px; height: 6px;
+      background: var(--deep-violet);
+      border-radius: 50%;
+      border: 1.5px solid var(--deep-indigo);
+      display: none;
+    }
+    .cart-dot.visible { display: block; }
+
+    /* ============ Hero Carousel (Zone 2A) ============ */
+    .hero-carousel {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--dark-purple);
+      overflow: hidden;
+    }
+    .hero-track {
+      display: flex;
+      width: 500%;
+      height: 100%;
+      transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hero-slide {
+      width: 20%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-color: var(--dark-purple);
+    }
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 70%, rgba(24, 23, 44, 0.4) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Tap zones */
+    .hero-taps {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      bottom: 40px; /* leave room for dots */
+      display: flex;
+      z-index: 3;
+    }
+    .hero-taps > div { flex: 1; cursor: pointer; }
+
+    /* Slide counter pill */
+    .slide-counter {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 11px;
+      color: var(--pure-white);
+      z-index: 5;
+      letter-spacing: 0.04em;
+    }
+
+    /* Progress dots */
+    .hero-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 5;
+    }
+    .hero-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: width 300ms cubic-bezier(0.22, 1, 0.36, 1), background 200ms;
+    }
+    .hero-dot.active {
+      width: 20px;
+      background: var(--soft-lilac);
+    }
+
+    /* ============ Product Info (Zone 2B) ============ */
+    .product-info {
+      padding: 20px 20px 0;
+    }
+
+    .eyebrow {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--soft-lilac);
+    }
+    .title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--pure-white);
+      margin-top: 6px;
+    }
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .price {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 22px;
+      color: var(--pure-white);
+    }
+    .compare-at {
+      font-size: 14px;
+      color: rgba(255, 254, 254, 0.5);
+      text-decoration: line-through;
+    }
+    .reviews-summary-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .stars {
+      display: flex;
+      gap: 2px;
+      color: var(--amber-orange);
+    }
+    .stars i { font-size: 14px; }
+    .review-meta {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 12px;
+      color: rgba(255, 254, 254, 0.7);
+    }
+
+    /* ============ Variant selectors ============ */
+    .variant-group {
+      margin-top: 24px;
+    }
+    .variant-group + .variant-group { margin-top: 16px; }
+    .group-label {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255, 254, 254, 0.6);
+    }
+    .selected-value {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      color: var(--pure-white);
+      margin-top: 8px;
+    }
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: var(--medium-purple);
+      border: 1px solid rgba(159, 117, 199, 0.3);
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      color: rgba(255, 254, 254, 0.8);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .pill:hover { border-color: rgba(159, 117, 199, 0.5); }
+    .pill.selected {
+      background: var(--deep-violet);
+      border-color: rgba(226, 197, 255, 0.6);
+      color: var(--pure-white);
+    }
+
+    /* ============ Quantity ============ */
+    .quantity-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-top: 8px;
+      width: fit-content;
+    }
+    .qty-btn {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: var(--medium-purple);
+      border: 1px solid rgba(159, 117, 199, 0.3);
+      color: var(--soft-lilac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+    }
+    .qty-btn:hover:not(:disabled) {
+      border-color: rgba(226, 197, 255, 0.5);
+    }
+    .qty-btn:active:not(:disabled) { transform: scale(0.94); }
+    .qty-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .qty-btn i { font-size: 16px; }
+    .qty-value {
+      width: 60px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 18px;
+      color: var(--pure-white);
+    }
+
+    /* ============ Collapsible Sections ============ */
+    .collapse-section {
+      padding: 20px;
+      border-top: 1px solid rgba(159, 117, 199, 0.15);
+    }
+    .collapse-section:first-of-type { border-top: none; }
+    .collapse-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .collapse-header .group-label { padding: 4px 0; }
+    .collapse-header .chevron {
+      color: var(--soft-lilac);
+      font-size: 18px;
+      transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .collapse-section.expanded .chevron {
+      transform: rotate(180deg);
+    }
+    .collapse-content {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 300ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease, margin-top 300ms ease;
+      margin-top: 0;
+    }
+    .collapse-section.expanded .collapse-content {
+      max-height: 2000px;
+      opacity: 1;
+      margin-top: 12px;
+    }
+    .description-body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 254, 254, 0.8);
+    }
+
+    /* Materials grid */
+    .materials-list {
+      display: flex;
+      flex-direction: column;
+    }
+    .material-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(159, 117, 199, 0.15);
+    }
+    .material-row:last-child { border-bottom: none; }
+    .material-key {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 12px;
+      color: rgba(255, 254, 254, 0.6);
+      flex-shrink: 0;
+    }
+    .material-value {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--pure-white);
+      text-align: right;
+    }
+
+    /* Reviews */
+    .reviews-summary {
+      text-align: center;
+      padding: 8px 0 20px;
+      border-bottom: 1px solid rgba(159, 117, 199, 0.15);
+      margin-bottom: 16px;
+    }
+    .reviews-summary .rating-big {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 36px;
+      color: var(--pure-white);
+      letter-spacing: -0.02em;
+    }
+    .reviews-summary .stars {
+      justify-content: center;
+      margin: 8px 0 6px;
+    }
+    .reviews-summary .stars i { font-size: 14px; }
+    .reviews-summary .based-on {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 11px;
+      color: rgba(255, 254, 254, 0.6);
+    }
+    .review-card {
+      background: var(--medium-purple);
+      border: 1px solid rgba(159, 117, 199, 0.2);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .review-card:last-child { margin-bottom: 0; }
+    .review-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .review-top .stars i { font-size: 12px; }
+    .review-avatar {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--lavender);
+      color: var(--deep-indigo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    .review-name {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--pure-white);
+    }
+    .review-age {
+      margin-left: auto;
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 11px;
+      color: rgba(255, 254, 254, 0.5);
+    }
+    .review-title {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--pure-white);
+      margin-top: 8px;
+    }
+    .review-body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      color: rgba(255, 254, 254, 0.75);
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* ============ Sticky Bottom Bar (Zone 3) ============ */
+    .bottom-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 88px;
+      padding: 12px 20px 24px;
+      background: rgba(24, 23, 44, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(159, 117, 199, 0.25);
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 45;
+    }
+    .total-block {
+      flex-shrink: 0;
+    }
+    .total-label {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: rgba(255, 254, 254, 0.5);
+    }
+    .total-price {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 18px;
+      color: var(--pure-white);
+      margin-top: 2px;
+    }
+    .add-to-cart {
+      flex: 1;
+      height: 52px;
+      background: var(--deep-violet);
+      border: none;
+      border-radius: 14px;
+      color: var(--pure-white);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 200ms, transform 150ms;
+    }
+    .add-to-cart:hover { background: var(--deep-violet-hover); }
+    .add-to-cart:active { transform: scale(0.97); }
+    .add-to-cart i { font-size: 16px; }
+    .add-to-cart.added {
+      background: var(--soft-lilac);
+      color: var(--deep-indigo);
+    }
+
+    /* Home indicator */
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--pure-white);
+      opacity: 0.85;
+      z-index: 70;
+      pointer-events: none;
+    }
+
+    /* Toast */
+    .toast {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(40px);
+      background: var(--deep-violet);
+      color: var(--pure-white);
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      padding: 10px 18px;
+      border-radius: 999px;
+      z-index: 50;
+      box-shadow: 0 8px 24px rgba(90, 25, 155, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+    .toast .view-cart {
+      color: var(--soft-lilac);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* ============ Mobile (real device) ============ */
+    @media (max-width: 460px) {
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        padding: 0;
+        gap: 0;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow: hidden;
+      }
+      body::after { display: none; }
+      .device {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100dvh;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      .device::after { display: none; }
+      .screen { border-radius: 0; }
+      .hint { display: none; }
+      .status-bar { display: none; }
+      .home-indicator { display: none; }
+
+      /* Top nav uses real safe area instead of fake status bar */
+      .top-nav {
+        padding-top: max(12px, env(safe-area-inset-top));
+        height: auto;
+        min-height: 64px;
+      }
+
+      /* Sticky bottom bar respects home indicator safe area */
+      .bottom-bar {
+        padding-bottom: max(24px, calc(env(safe-area-inset-bottom) + 12px));
+      }
+      #scroll-container {
+        padding-bottom: 96px;
+      }
+
+      /* Toast clears the bottom bar comfortably */
+      .toast { bottom: 112px; }
+
+      /* Hero carousel pulled to top edge on phones */
+      .hero-carousel { aspect-ratio: 1 / 1; }
+
+      /* Heading & price scale slightly on tiny screens */
+      .title { font-size: clamp(24px, 7vw, 28px); }
+    }
+
+    @media (max-width: 360px) {
+      .product-info { padding: 16px 16px 0; }
+      .collapse-section { padding: 18px 16px; }
+      .pill { padding: 0 12px; font-size: 12px; }
+      .review-card { padding: 12px; }
+      .total-price, .add-to-cart { font-size: 14px; }
+    }
+
+    @media (max-height: 700px) and (orientation: landscape) {
+      .hero-carousel { aspect-ratio: 16 / 9; max-height: 60vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hint">Detail view · tap back to return to Shop all · cart count syncs</div>
+
+  <div class="device">
+    <div class="screen">
+
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="right">
+          <i class="ti ti-antenna-bars-5"></i>
+          <i class="ti ti-wifi"></i>
+          <i class="ti ti-battery-3"></i>
+        </div>
+      </div>
+
+      <!-- Scroll container -->
+      <div id="scroll-container">
+
+        <!-- ZONE 1: Top Nav -->
+        <nav class="top-nav">
+          <button class="nav-btn" id="back-btn" aria-label="Back">
+            <i class="ti ti-chevron-left"></i>
+          </button>
+          <span class="breadcrumb">CHARMS</span>
+          <button class="nav-btn" id="cart-btn-top" aria-label="Cart">
+            <i class="ti ti-shopping-cart"></i>
+            <span class="cart-dot" id="cart-dot-top"></span>
+          </button>
+        </nav>
+
+        <!-- ZONE 2A: Hero Carousel -->
+        <section class="hero-carousel">
+          <div class="hero-track" id="hero-track">
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=800&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=800&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1535556116002-6281ff3e9f36?w=800&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80');"></div>
+          </div>
+          <div class="hero-scrim"></div>
+
+          <div class="slide-counter" id="slide-counter">1 / 5</div>
+
+          <div class="hero-taps">
+            <div id="hero-tap-left"></div>
+            <div id="hero-tap-right"></div>
+          </div>
+
+          <div class="hero-dots" id="hero-dots">
+            <div class="hero-dot active" data-idx="0"></div>
+            <div class="hero-dot" data-idx="1"></div>
+            <div class="hero-dot" data-idx="2"></div>
+            <div class="hero-dot" data-idx="3"></div>
+            <div class="hero-dot" data-idx="4"></div>
+          </div>
+        </section>
+
+        <!-- ZONE 2B: Product Info -->
+        <section class="product-info">
+          <div class="eyebrow">PLACEHOLDER · COLLECTION</div>
+          <h1 class="title">Product Name Placeholder</h1>
+          <div class="price-row">
+            <span class="price" id="unit-price">$48</span>
+            <span class="compare-at">$58</span>
+          </div>
+          <div class="reviews-summary-row">
+            <div class="stars">
+              <i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
+            </div>
+            <span class="review-meta">0.0 (000 reviews)</span>
+          </div>
+
+          <!-- Variants -->
+          <div class="variant-group" data-group="one">
+            <div class="group-label">OPTION ONE PLACEHOLDER</div>
+            <div class="selected-value" data-selected>Selected variant placeholder</div>
+            <div class="pill-row">
+              <button class="pill selected" data-value="Option A">Option A</button>
+              <button class="pill" data-value="Option B">Option B</button>
+              <button class="pill" data-value="Option C">Option C</button>
+            </div>
+          </div>
+
+          <div class="variant-group" data-group="two">
+            <div class="group-label">OPTION TWO PLACEHOLDER</div>
+            <div class="selected-value" data-selected>Selected variant placeholder</div>
+            <div class="pill-row">
+              <button class="pill selected" data-value="Choice 1">Choice 1</button>
+              <button class="pill" data-value="Choice 2">Choice 2</button>
+              <button class="pill" data-value="Choice 3">Choice 3</button>
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div class="variant-group">
+            <div class="group-label">QUANTITY</div>
+            <div class="quantity-row">
+              <button class="qty-btn" id="qty-minus" disabled aria-label="Decrease">
+                <i class="ti ti-minus"></i>
+              </button>
+              <span class="qty-value" id="qty-value">1</span>
+              <button class="qty-btn" id="qty-plus" aria-label="Increase">
+                <i class="ti ti-plus"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ZONE 2B Section 4: Description -->
+        <section class="collapse-section expanded" data-section="description">
+          <div class="collapse-header">
+            <span class="group-label">DESCRIPTION</span>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="collapse-content">
+            <p class="description-body">Description placeholder. This is where the product description will live once finalized. Replace with real copy describing the charm, its inspiration, and any meaningful details.</p>
+          </div>
+        </section>
+
+        <!-- Materials & Care -->
+        <section class="collapse-section" data-section="materials">
+          <div class="collapse-header">
+            <span class="group-label">MATERIALS &amp; CARE</span>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="collapse-content">
+            <div class="materials-list">
+              <div class="material-row">
+                <span class="material-key">Material</span>
+                <span class="material-value">Placeholder</span>
+              </div>
+              <div class="material-row">
+                <span class="material-key">Finish</span>
+                <span class="material-value">Placeholder</span>
+              </div>
+              <div class="material-row">
+                <span class="material-key">Hardware</span>
+                <span class="material-value">Placeholder</span>
+              </div>
+              <div class="material-row">
+                <span class="material-key">Care</span>
+                <span class="material-value">Placeholder care instructions text spanning multiple words to test wrapping</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reviews -->
+        <section class="collapse-section" data-section="reviews">
+          <div class="collapse-header">
+            <span class="group-label">REVIEWS</span>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="collapse-content">
+            <div class="reviews-summary">
+              <div class="rating-big">0.0</div>
+              <div class="stars">
+                <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
+              </div>
+              <div class="based-on">Based on 000 reviews</div>
+            </div>
+
+            <div class="review-card">
+              <div class="review-top">
+                <div class="stars">
+                  <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
+                </div>
+                <div class="review-avatar">P</div>
+                <span class="review-name">Placeholder Name</span>
+                <span class="review-age">00 days ago</span>
+              </div>
+              <div class="review-title">Review title placeholder</div>
+              <div class="review-body">Review body placeholder text that demonstrates how a multi-line review will wrap inside the card with appropriate breathing room.</div>
+            </div>
+
+            <div class="review-card">
+              <div class="review-top">
+                <div class="stars">
+                  <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
+                </div>
+                <div class="review-avatar">P</div>
+                <span class="review-name">Placeholder Name</span>
+                <span class="review-age">00 days ago</span>
+              </div>
+              <div class="review-title">Review title placeholder</div>
+              <div class="review-body">Review body placeholder text that demonstrates how a multi-line review will wrap inside the card with appropriate breathing room.</div>
+            </div>
+
+            <div class="review-card">
+              <div class="review-top">
+                <div class="stars">
+                  <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
+                </div>
+                <div class="review-avatar">P</div>
+                <span class="review-name">Placeholder Name</span>
+                <span class="review-age">00 days ago</span>
+              </div>
+              <div class="review-title">Review title placeholder</div>
+              <div class="review-body">Review body placeholder text that demonstrates how a multi-line review will wrap inside the card with appropriate breathing room.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bottom spacer -->
+        <div style="height: 120px;"></div>
+
+      </div>
+
+      <!-- ZONE 3: Sticky bottom bar -->
+      <div class="bottom-bar">
+        <div class="total-block">
+          <div class="total-label">TOTAL</div>
+          <div class="total-price" id="total-price">$48</div>
+        </div>
+        <button class="add-to-cart" id="add-to-cart-btn">
+          <i class="ti ti-plus"></i>
+          <span>Add to cart · <span id="cta-price">$48</span></span>
+        </button>
+      </div>
+
+      <!-- Home indicator -->
+      <div class="home-indicator"></div>
+
+      <!-- Toast -->
+      <div class="toast" id="toast">
+        <span id="toast-msg">Product Name Placeholder added</span>
+        <span class="view-cart" id="toast-view-cart">view cart →</span>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+(function() {
+  // ============ Product catalog (shared with flow-shop) ============
+  const PRODUCTS = [
+    { name: 'Silk Scarf',       price: 38, img: 'assets/silk-scarf.jpg' },
+    { name: 'Charm Keychain',   price: 24, img: 'assets/keychain.jpg' },
+    { name: 'Satin Scrunchie',  price: 14, img: 'assets/satin-scrunchie.jpg' },
+    { name: 'Sticker Sheet',    price: 12, img: 'assets/sticker-sheet.jpg' },
+    { name: 'B Mark',           price: 4,  img: 'assets/b-mark.jpg' },
+    { name: 'Star Boy',         price: 5,  img: 'assets/star-boy.jpg' },
+    { name: 'Star Girl',        price: 5,  img: 'assets/star-girl.jpg' },
+    { name: 'No Bad Hair Days', price: 4,  img: 'assets/no-bad-hair-days.jpg' },
+    { name: 'Speak Up',         price: 5,  img: 'assets/speak-up.jpg' }
+  ];
+
+  // Read product from URL ?idx=N, fall back to first product
+  const urlParams = new URLSearchParams(window.location.search);
+  const idx = Math.max(0, Math.min(PRODUCTS.length - 1, parseInt(urlParams.get('idx') || '0', 10) || 0));
+  const product = PRODUCTS[idx];
+
+  // Populate hero image (first slide), title, price
+  const firstSlide = document.querySelector('.hero-track .hero-slide');
+  if (firstSlide) firstSlide.style.backgroundImage = `url('${product.img}')`;
+  const titleEl = document.querySelector('.title');
+  if (titleEl) titleEl.textContent = product.name;
+  const priceMainEl = document.getElementById('unit-price');
+  if (priceMainEl) priceMainEl.textContent = '$' + product.price;
+  const compareEl = document.querySelector('.compare-at');
+  if (compareEl) compareEl.textContent = '$' + (product.price + 10);
+
+  // ============ Pricing ============
+  const BASE_PRICE = product.price;
+  let quantity = 1;
+  const totalPriceEl = document.getElementById('total-price');
+  const qtyValueEl = document.getElementById('qty-value');
+  const qtyMinusBtn = document.getElementById('qty-minus');
+  const qtyPlusBtn = document.getElementById('qty-plus');
+
+  function fmt(n) { return '$' + n; }
+  function refreshTotal() {
+    const total = BASE_PRICE * quantity;
+    totalPriceEl.textContent = fmt(total);
+    const cta = document.getElementById('cta-price');
+    if (cta) cta.textContent = fmt(total);
+  }
+
+  function setQuantity(q) {
+    quantity = Math.max(1, Math.min(99, q));
+    qtyValueEl.textContent = quantity;
+    qtyMinusBtn.disabled = quantity <= 1;
+    qtyPlusBtn.disabled = quantity >= 99;
+    refreshTotal();
+  }
+
+  qtyMinusBtn.addEventListener('click', () => setQuantity(quantity - 1));
+  qtyPlusBtn.addEventListener('click', () => setQuantity(quantity + 1));
+  refreshTotal();
+
+  // ============ Variant pills ============
+  document.querySelectorAll('.variant-group[data-group]').forEach(group => {
+    const display = group.querySelector('[data-selected]');
+    const pills = group.querySelectorAll('.pill');
+    // initialize display with current selection
+    const initial = group.querySelector('.pill.selected');
+    if (initial) display.textContent = initial.dataset.value;
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+        display.textContent = pill.dataset.value;
+      });
+    });
+  });
+
+  // ============ Collapsibles ============
+  document.querySelectorAll('.collapse-section').forEach(section => {
+    const header = section.querySelector('.collapse-header');
+    header.addEventListener('click', () => {
+      section.classList.toggle('expanded');
+    });
+  });
+
+  // ============ Hero carousel ============
+  const heroTrack = document.getElementById('hero-track');
+  const dots = document.querySelectorAll('.hero-dot');
+  const counter = document.getElementById('slide-counter');
+  const slideCount = 5;
+  const slideDuration = 3000;
+  let currentSlide = 0;
+  let autoTimer = null;
+  let inactivityTimer = null;
+  let paused = false;
+
+  function setSlide(idx) {
+    currentSlide = (idx + slideCount) % slideCount;
+    heroTrack.style.transform = `translateX(-${currentSlide * 20}%)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    counter.textContent = `${currentSlide + 1} / ${slideCount}`;
+  }
+
+  function startAuto() {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => {
+      setSlide(currentSlide + 1);
+      startAuto();
+    }, slideDuration);
+  }
+  function pauseAuto() {
+    paused = true;
+    clearTimeout(autoTimer);
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      paused = false;
+      startAuto();
+    }, 5000);
+  }
+
+  document.getElementById('hero-tap-left').addEventListener('click', () => {
+    setSlide(currentSlide - 1);
+    pauseAuto();
+  });
+  document.getElementById('hero-tap-right').addEventListener('click', () => {
+    setSlide(currentSlide + 1);
+    pauseAuto();
+  });
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setSlide(i);
+      pauseAuto();
+    });
+  });
+
+  // Swipe support
+  const heroCarousel = document.querySelector('.hero-carousel');
+  let touchStartX = null;
+  heroCarousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  heroCarousel.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) {
+      setSlide(currentSlide + (dx < 0 ? 1 : -1));
+      pauseAuto();
+    }
+    touchStartX = null;
+  });
+
+  startAuto();
+
+  // ============ Cart state (shared with shop via localStorage) ============
+  // Stored as { [productIdx: string]: qty }
+  const CART_KEY = 'braid_cart';
+  function readCart() {
+    try {
+      const raw = localStorage.getItem(CART_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : {};
+    } catch { return {}; }
+  }
+  function writeCart(cart) {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch {}
+  }
+  function addToCart(productIdx, qty) {
+    const cart = readCart();
+    const key = String(productIdx);
+    cart[key] = (cart[key] || 0) + qty;
+    writeCart(cart);
+    return cart;
+  }
+  function getCartCount() {
+    return Object.values(readCart()).reduce((s, q) => s + (q || 0), 0);
+  }
+  function cartSummary() {
+    const cart = readCart();
+    const entries = Object.entries(cart).filter(([, q]) => q > 0);
+    const total = entries.reduce((s, [, q]) => s + q, 0);
+    if (total === 0) return { total: 0, text: 'Cart is empty' };
+    const parts = entries.slice(0, 2).map(([k, q]) => {
+      const p = PRODUCTS[parseInt(k, 10)];
+      return p ? `${p.name} ×${q}` : `Item ${k} ×${q}`;
+    });
+    const extra = entries.length > 2 ? `, +${entries.length - 2} more` : '';
+    return { total, text: `${total} item${total > 1 ? 's' : ''} · ${parts.join(', ')}${extra}` };
+  }
+
+  const cartDotTop = document.getElementById('cart-dot-top');
+  function refreshCartIndicator() {
+    cartDotTop.classList.toggle('visible', getCartCount() > 0);
+  }
+  refreshCartIndicator();
+
+  // ============ Add to cart flow ============
+  const addBtn = document.getElementById('add-to-cart-btn');
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toast-msg');
+  let toastTimer = null;
+  let resetBtnTimer = null;
+
+  function renderCtaDefault() {
+    addBtn.classList.remove('added');
+    addBtn.innerHTML = '<i class="ti ti-plus"></i><span>Add to cart · <span id="cta-price">' + fmt(BASE_PRICE * quantity) + '</span></span>';
+  }
+
+  addBtn.addEventListener('click', () => {
+    addToCart(idx, quantity);
+    refreshCartIndicator();
+
+    // Flash button
+    addBtn.classList.add('added');
+    addBtn.innerHTML = '<i class="ti ti-check"></i><span>Added · ' + fmt(BASE_PRICE * quantity) + '</span>';
+    clearTimeout(resetBtnTimer);
+    resetBtnTimer = setTimeout(() => {
+      renderCtaDefault();
+    }, 1200);
+
+    // Toast
+    toastMsg.textContent = product.name + ' added';
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+  });
+
+  document.getElementById('toast-view-cart').addEventListener('click', () => {
+    window.location.href = 'build-braid-flow-cart.html';
+  });
+
+  document.getElementById('cart-btn-top').addEventListener('click', () => {
+    window.location.href = 'build-braid-flow-cart.html';
+  });
+
+  document.getElementById('back-btn').addEventListener('click', () => {
+    window.location.href = 'build-braid-flow-shop.html';
+  });
+})();
+</script>
+</body>
+</html>
