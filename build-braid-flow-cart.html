@@ -36,25 +36,12 @@
       font-family: var(--font-body);
       background: var(--deep-indigo);
       color: var(--pure-white);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      padding: 32px 16px 48px;
-      gap: 20px;
+      min-height: 100dvh;
       position: relative;
       overflow: hidden;
     }
-    body::after {
-      content: '';
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 40%;
-      background: radial-gradient(ellipse at 50% 0%, rgba(199, 188, 246, 0.05), transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
+    body::after { display: none; }
 
     .hint {
       font-family: var(--font-ui);
@@ -70,38 +57,29 @@
 
     /* ============ Device ============ */
     .device {
-      width: 380px;
-      height: 820px;
-      background: #f8f8f8;
-      border-radius: 56px;
-      padding: 12px;
-      box-shadow:
-        0 50px 100px -20px rgba(0, 0, 0, 0.6),
-        0 0 0 1px rgba(255, 255, 255, 0.08),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--deep-indigo);
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
       position: relative;
       z-index: 1;
     }
-    .device::after {
-      content: '';
-      position: absolute;
-      left: 10%; right: 10%;
-      bottom: -70px;
-      height: 70px;
-      background: linear-gradient(to bottom, rgba(248, 248, 248, 0.18), transparent);
-      filter: blur(10px);
-      transform: scaleY(-1);
-      opacity: 0.4;
-      pointer-events: none;
-    }
+    .device::after { display: none; }
 
     .screen {
       width: 100%; height: 100%;
-      border-radius: 44px;
+      border-radius: 0;
       overflow: hidden;
       position: relative;
       background: var(--deep-indigo);
     }
+
+    /* Mockup chrome — not shown in the real responsive app */
+    .hint { display: none; }
+    .home-indicator { display: none; }
 
     /* ============ Status bar ============ */
     .status-bar {
@@ -109,7 +87,7 @@
       top: 0; left: 0; right: 0;
       height: 44px;
       padding: 14px 24px 0;
-      display: flex;
+      display: none; /* fake iPhone status bar — hidden in the real responsive app */
       justify-content: space-between;
       align-items: flex-start;
       font-family: var(--font-ui);
@@ -140,8 +118,8 @@
     .top-nav {
       position: sticky;
       top: 0;
-      height: 104px;
-      padding: 44px 20px 0;
+      height: 68px;
+      padding: 12px 20px;
       background: rgba(24, 23, 44, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -174,8 +152,8 @@
       letter-spacing: -0.01em;
       position: absolute;
       left: 50%;
-      bottom: 16px;
-      transform: translateX(-50%);
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
 
     /* ============ Cart Body ============ */
@@ -499,7 +477,7 @@
     .drawer {
       position: absolute;
       top: 0; right: 0; bottom: 0;
-      width: 72%;
+      width: min(72%, 360px);
       background: rgba(90, 25, 155, 0.6);
       backdrop-filter: blur(24px) saturate(150%);
       -webkit-backdrop-filter: blur(24px) saturate(150%);
@@ -510,7 +488,7 @@
       transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
       display: flex;
       flex-direction: column;
-      padding: 56px 0 32px;
+      padding: 24px 0 32px;
       overflow: hidden;
       border-top-right-radius: 44px;
       border-bottom-right-radius: 44px;
@@ -569,6 +547,50 @@
     }
 
     /* ============ Mobile (real device) ============ */
+    /* ============ Tablet — centered column + wide checkout bar ============ */
+    @media (min-width: 768px) {
+      .top-nav { padding: 12px max(32px, calc((100vw - 1160px) / 2)); }
+      .cart-body {
+        max-width: 1160px;
+        margin-inline: auto;
+        padding: 44px max(40px, calc((100vw - 1160px) / 2)) 80px;
+      }
+      .cart-heading { font-size: 40px; }
+      .cart-sub { font-size: 15px; margin-bottom: 28px; }
+
+      /* Checkout bar contents align to the centered column */
+      .bottom-bar {
+        padding: 16px max(40px, calc((100vw - 1160px) / 2)) 24px;
+        display: flex;
+        align-items: flex-end;
+        gap: 32px;
+      }
+      .bottom-bar .totals { flex: 1; margin-bottom: 0; }
+      .bottom-bar .checkout-btn { width: 320px; }
+    }
+
+    /* ============ Desktop — items left, sticky order-summary card right ============ */
+    @media (min-width: 1080px) {
+      .line-items { max-width: 680px; }
+      .bottom-bar {
+        position: fixed;
+        top: 108px;
+        bottom: auto;
+        left: auto;
+        right: max(40px, calc((100vw - 1160px) / 2));
+        width: 360px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 24px;
+        border: 1px solid rgba(159, 117, 199, 0.25);
+        border-radius: 18px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      }
+      .bottom-bar .totals { margin-bottom: 16px; }
+      .bottom-bar .checkout-btn { width: 100%; }
+    }
+
     @media (max-width: 460px) {
       html { -webkit-text-size-adjust: 100%; }
       body {
@@ -878,7 +900,7 @@
       render();
       showToast(`${PRODUCTS[idx]?.name || 'Item'} removed`);
     } else if (action === 'open') {
-      window.location.href = `braid-detail-2026-07-15.html?idx=${idx}`;
+      window.location.href = `build-braid-flow-detail.html?idx=${idx}`;
     }
   });
 
@@ -895,10 +917,10 @@
 
   // ============ Nav buttons ============
   document.getElementById('back-btn').addEventListener('click', () => {
-    window.location.href = 'braid-shop-2026-07-15.html';
+    window.location.href = 'build-braid-flow-shop.html';
   });
   document.getElementById('continue-btn').addEventListener('click', () => {
-    window.location.href = 'braid-shop-2026-07-15.html';
+    window.location.href = 'build-braid-flow-shop.html';
   });
   document.getElementById('checkout-btn').addEventListener('click', () => {
     showToast('Checkout · coming soon');

@@ -37,25 +37,12 @@
       font-family: var(--font-body);
       background: var(--deep-indigo);
       color: var(--pure-white);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      padding: 32px 16px 48px;
-      gap: 20px;
+      min-height: 100dvh;
       position: relative;
       overflow: hidden;
     }
-    body::after {
-      content: '';
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 40%;
-      background: radial-gradient(ellipse at 50% 0%, rgba(199, 188, 246, 0.05), transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
+    body::after { display: none; }
 
     .hint {
       font-family: var(--font-ui);
@@ -71,38 +58,29 @@
 
     /* ============ Device ============ */
     .device {
-      width: 380px;
-      height: 820px;
-      background: #f8f8f8;
-      border-radius: 56px;
-      padding: 12px;
-      box-shadow:
-        0 50px 100px -20px rgba(0, 0, 0, 0.6),
-        0 0 0 1px rgba(255, 255, 255, 0.08),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--deep-indigo);
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
       position: relative;
       z-index: 1;
     }
-    .device::after {
-      content: '';
-      position: absolute;
-      left: 10%; right: 10%;
-      bottom: -70px;
-      height: 70px;
-      background: linear-gradient(to bottom, rgba(248, 248, 248, 0.18), transparent);
-      filter: blur(10px);
-      transform: scaleY(-1);
-      opacity: 0.4;
-      pointer-events: none;
-    }
+    .device::after { display: none; }
 
     .screen {
       width: 100%; height: 100%;
-      border-radius: 44px;
+      border-radius: 0;
       overflow: hidden;
       position: relative;
       background: var(--deep-indigo);
     }
+
+    /* Mockup chrome — not shown in the real responsive app */
+    .hint { display: none; }
+    .home-indicator { display: none; }
 
     /* ============ Status bar ============ */
     .status-bar {
@@ -110,7 +88,7 @@
       top: 0; left: 0; right: 0;
       height: 44px;
       padding: 14px 24px 0;
-      display: flex;
+      display: none; /* fake iPhone status bar — hidden in the real responsive app */
       justify-content: space-between;
       align-items: flex-start;
       font-family: var(--font-ui);
@@ -141,8 +119,8 @@
     .top-nav {
       position: sticky;
       top: 0;
-      height: 104px; /* 44 status + 60 nav */
-      padding: 44px 20px 0;
+      height: 68px;
+      padding: 12px 20px;
       background: rgba(24, 23, 44, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -679,6 +657,60 @@
     }
 
     /* ============ Mobile (real device) ============ */
+    /* ============ Tablet & Desktop — two-column PDP ============ */
+    @media (min-width: 768px) {
+      /* Center nav content to the same column as the body */
+      .top-nav { padding: 14px max(32px, calc((100vw - 1160px) / 2)); height: 72px; }
+      .nav-logo { height: 44px; }
+
+      /* Two-column product layout: image left, info right */
+      .pdp-body {
+        max-width: 1160px;
+        width: 100%;
+        margin-inline: auto;
+        padding: 40px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+        column-gap: 56px;
+        align-items: start;
+        grid-template-areas:
+          "media info"
+          "media desc";
+      }
+      .hero-carousel {
+        grid-area: media;
+        border-radius: 22px;
+        position: sticky;
+        top: 96px;
+      }
+      .product-info { grid-area: info; padding: 4px 0 0; }
+      .title { font-size: 40px; }
+      .price { font-size: 26px; }
+      .collapse-section { grid-area: desc; }
+      .pdp-spacer { display: none; }
+
+      /* Sticky CTA constrained to the content column, aligned under the info panel */
+      .bottom-bar {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: min(1160px, calc(100vw - 80px));
+        height: auto;
+        padding: 14px 0 20px;
+        background: transparent;
+        border-top: none;
+        box-shadow: none;
+        justify-content: flex-end;
+        pointer-events: none;
+      }
+      .bottom-bar .add-to-cart {
+        flex: 0 0 auto;
+        width: min(420px, 42%);
+        pointer-events: auto;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+      }
+    }
+
     @media (max-width: 460px) {
       html { -webkit-text-size-adjust: 100%; }
       body {
@@ -776,6 +808,7 @@
           </button>
         </nav>
 
+        <div class="pdp-body">
         <!-- ZONE 2A: Hero Carousel -->
         <section class="hero-carousel">
           <!-- Slides are built from the product's images by the script below -->
@@ -828,7 +861,8 @@
         </section>
 
         <!-- Bottom spacer -->
-        <div style="height: 120px;"></div>
+        <div class="pdp-spacer" style="height: 120px;"></div>
+        </div><!-- /.pdp-body -->
 
       </div>
 
@@ -1158,15 +1192,15 @@
   });
 
   document.getElementById('toast-view-cart').addEventListener('click', () => {
-    window.location.href = 'braid-cart-2026-07-15.html';
+    window.location.href = 'build-braid-flow-cart.html';
   });
 
   document.getElementById('cart-btn-top').addEventListener('click', () => {
-    window.location.href = 'braid-cart-2026-07-15.html';
+    window.location.href = 'build-braid-flow-cart.html';
   });
 
   document.getElementById('back-btn').addEventListener('click', () => {
-    window.location.href = 'braid-shop-2026-07-15.html';
+    window.location.href = 'build-braid-flow-shop.html';
   });
 })();
 </script>
