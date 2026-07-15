@@ -743,15 +743,15 @@
 (function() {
   // ============ Product catalog (shared with shop & detail) ============
   const PRODUCTS = [
-    { name: 'Silk Scarf',       price: 38, img: 'assets/silk-scarf.jpg' },
-    { name: 'Charm Keychain',   price: 24, img: 'assets/keychain.jpg' },
-    { name: 'Satin Scrunchie',  price: 14, img: 'assets/satin-scrunchie.jpg' },
-    { name: 'Sticker Sheet',    price: 12, img: 'assets/sticker-sheet.jpg' },
-    { name: 'B Mark',           price: 4,  img: 'assets/b-mark.jpg' },
-    { name: 'Star Boy',         price: 5,  img: 'assets/star-boy.jpg' },
-    { name: 'Star Girl',        price: 5,  img: 'assets/star-girl.jpg' },
-    { name: 'No Bad Hair Days', price: 4,  img: 'assets/no-bad-hair-days.jpg' },
-    { name: 'Speak Up',         price: 5,  img: 'assets/speak-up.jpg' }
+    { name: 'Silk Scarf',       price: 12, img: 'assets/silk-scarf.jpg' },
+    { name: 'Charm Keychain',   price: 5,  img: 'assets/keychain.jpg' },
+    { name: 'Satin Scrunchie',  price: 7,  img: 'assets/satin-scrunchie.jpg' },
+    { name: 'Sticker Sheet',    price: 8,  img: 'assets/sticker-sheet.jpg' },
+    { name: 'B Mark',           price: 2,  img: 'assets/b-mark.jpg' },
+    { name: 'Star Boy',         price: 2,  img: 'assets/star-boy.jpg' },
+    { name: 'Star Girl',        price: 2,  img: 'assets/star-girl.jpg' },
+    { name: 'No Bad Hair Days', price: 2,  img: 'assets/no-bad-hair-days.jpg' },
+    { name: 'Speak Up',         price: 2,  img: 'assets/speak-up.jpg' }
   ];
 
   // ============ Cart state (shared via localStorage) ============
@@ -878,7 +878,7 @@
       render();
       showToast(`${PRODUCTS[idx]?.name || 'Item'} removed`);
     } else if (action === 'open') {
-      window.location.href = `build-braid-flow-detail.html?idx=${idx}`;
+      window.location.href = `braid-detail-2026-07-15.html?idx=${idx}`;
     }
   });
 
@@ -895,10 +895,10 @@
 
   // ============ Nav buttons ============
   document.getElementById('back-btn').addEventListener('click', () => {
-    window.location.href = 'build-braid-flow-shop.html';
+    window.location.href = 'braid-shop-2026-07-15.html';
   });
   document.getElementById('continue-btn').addEventListener('click', () => {
-    window.location.href = 'build-braid-flow-shop.html';
+    window.location.href = 'braid-shop-2026-07-15.html';
   });
   document.getElementById('checkout-btn').addEventListener('click', () => {
     showToast('Checkout · coming soon');

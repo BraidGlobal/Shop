@@ -437,6 +437,29 @@
     .cart-grid-btn i { font-size: 16px; }
     .cart-grid-btn .cart-dot { top: 0; right: 0; }
 
+    /* Top-right cart button + count badge (header) */
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .cart-count-badge {
+      position: absolute;
+      top: -5px; right: -5px;
+      min-width: 18px; height: 18px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: var(--soft-lilac);
+      color: var(--deep-indigo);
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 10px;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--deep-indigo);
+    }
+    .cart-count-badge.visible { display: flex; }
+    @keyframes cart-bump { 0% { transform: scale(1); } 40% { transform: scale(1.16); } 100% { transform: scale(1); } }
+    .cart-bump { animation: cart-bump 380ms ease; }
+
     /* Grid heading */
     .grid-intro {
       padding: 22px 16px 8px;
@@ -896,8 +919,14 @@
             <div class="glass-pill" aria-label="Braid">
               <img class="brand-logo" src="assets/braid-logo.png" alt="Braid" />
             </div>
-            <div class="glass-circle menu-btn" id="menu-btn-hero" aria-label="Menu">
-              <i class="ti ti-menu-2"></i>
+            <div class="nav-actions">
+              <div class="glass-circle js-cart-btn" id="cart-btn-hero" role="button" aria-label="View cart">
+                <i class="ti ti-shopping-cart"></i>
+                <span class="cart-count-badge js-cart-badge">0</span>
+              </div>
+              <div class="glass-circle menu-btn" id="menu-btn-hero" aria-label="Menu">
+                <i class="ti ti-menu-2"></i>
+              </div>
             </div>
           </div>
 
@@ -910,8 +939,8 @@
           <!-- Hero text -->
           <div class="hero-text">
             <div class="live-dot"></div>
-            <h1 class="display-headline">Crafted<br/>for You</h1>
-            <p class="subline">Heirloom charm keychains</p>
+            <h1 class="display-headline">Treat<br/>Yourself</h1>
+            <p class="subline">Scarves, charms &amp; studio essentials</p>
           </div>
 
           <!-- Scroll cue -->
@@ -927,9 +956,15 @@
           <div class="sticky-bar">
             <img class="brand-logo brand-logo-sm" src="assets/braid-logo.png" alt="Braid" />
             <h2>Shop all</h2>
-            <button class="cart-grid-btn" id="menu-btn-grid" aria-label="Menu">
-              <i class="ti ti-menu-2"></i>
-            </button>
+            <div class="nav-actions">
+              <button class="cart-grid-btn js-cart-btn" id="cart-btn-grid" aria-label="View cart">
+                <i class="ti ti-shopping-cart"></i>
+                <span class="cart-count-badge js-cart-badge">0</span>
+              </button>
+              <button class="cart-grid-btn" id="menu-btn-grid" aria-label="Menu">
+                <i class="ti ti-menu-2"></i>
+              </button>
+            </div>
           </div>
 
           <div class="grid-intro">
@@ -972,12 +1007,6 @@
         <div class="drawer-footer">Braid · Hair care, curated</div>
       </aside>
 
-      <!-- Floating cart FAB (only when items in cart) -->
-      <button class="cart-fab" id="cart-fab" aria-label="View cart">
-        <i class="ti ti-shopping-cart"></i>
-        <span class="cart-fab-badge" id="cart-fab-badge">0</span>
-      </button>
-
       <!-- Home indicator -->
       <div class="home-indicator"></div>
 
@@ -994,15 +1023,15 @@
 (function() {
   // ============ Products ============
   const products = [
-    { name: 'Silk Scarf',       price: 38, img: 'assets/silk-scarf.jpg' },
-    { name: 'Charm Keychain',   price: 24, img: 'assets/keychain.jpg' },
-    { name: 'Satin Scrunchie',  price: 14, img: 'assets/satin-scrunchie.jpg' },
-    { name: 'Sticker Sheet',    price: 12, img: 'assets/sticker-sheet.jpg' },
-    { name: 'B Mark',           price: 4,  img: 'assets/b-mark.jpg' },
-    { name: 'Star Boy',         price: 5,  img: 'assets/star-boy.jpg' },
-    { name: 'Star Girl',        price: 5,  img: 'assets/star-girl.jpg' },
-    { name: 'No Bad Hair Days', price: 4,  img: 'assets/no-bad-hair-days.jpg' },
-    { name: 'Speak Up',         price: 5,  img: 'assets/speak-up.jpg' }
+    { name: 'Silk Scarf',       price: 12, img: 'assets/silk-scarf.jpg' },
+    { name: 'Charm Keychain',   price: 5,  img: 'assets/keychain.jpg' },
+    { name: 'Satin Scrunchie',  price: 7,  img: 'assets/satin-scrunchie.jpg' },
+    { name: 'Sticker Sheet',    price: 8,  img: 'assets/sticker-sheet.jpg' },
+    { name: 'B Mark',           price: 2,  img: 'assets/b-mark.jpg' },
+    { name: 'Star Boy',         price: 2,  img: 'assets/star-boy.jpg' },
+    { name: 'Star Girl',        price: 2,  img: 'assets/star-girl.jpg' },
+    { name: 'No Bad Hair Days', price: 2,  img: 'assets/no-bad-hair-days.jpg' },
+    { name: 'Speak Up',         price: 2,  img: 'assets/speak-up.jpg' }
   ];
 
   const grid = document.getElementById('product-grid');
@@ -1070,21 +1099,20 @@
     }, 1800);
   }
 
-  const cartFab = document.getElementById('cart-fab');
-  const cartFabBadge = document.getElementById('cart-fab-badge');
+  const cartBtns = document.querySelectorAll('.js-cart-btn');
+  const cartBadges = document.querySelectorAll('.js-cart-badge');
 
   function updateCartFab(animate = false) {
-    if (cartCount > 0) {
-      cartFabBadge.textContent = cartCount;
-      cartFab.classList.add('visible');
-      if (animate) {
-        cartFab.classList.remove('bump');
-        // force reflow so the animation restarts
-        void cartFab.offsetWidth;
-        cartFab.classList.add('bump');
-      }
-    } else {
-      cartFab.classList.remove('visible');
+    cartBadges.forEach(badge => {
+      badge.textContent = cartCount;
+      badge.classList.toggle('visible', cartCount > 0);
+    });
+    if (animate && cartCount > 0) {
+      cartBtns.forEach(btn => {
+        btn.classList.remove('cart-bump');
+        void btn.offsetWidth; // restart animation
+        btn.classList.add('cart-bump');
+      });
     }
   }
 
@@ -1109,7 +1137,7 @@
   document.querySelectorAll('.product-card').forEach((card, i) => {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.add-btn')) return;
-      window.location.href = `build-braid-flow-detail.html?idx=${i}`;
+      window.location.href = `braid-detail-2026-07-15.html?idx=${i}`;
     });
   });
 
@@ -1137,7 +1165,7 @@
       closeDrawer();
       setTimeout(() => {
         if (action === 'cart') {
-          window.location.href = 'build-braid-flow-cart.html';
+          window.location.href = 'braid-cart-2026-07-15.html';
         } else if (action === 'about') {
           showToast('About Braid');
         } else if (action === 'shipping') {
@@ -1147,10 +1175,10 @@
     });
   });
 
-  // Floating cart FAB → open cart page
-  cartFab.addEventListener('click', () => {
-    window.location.href = 'build-braid-flow-cart.html';
-  });
+  // Header cart buttons → open cart page
+  cartBtns.forEach(btn => btn.addEventListener('click', () => {
+    window.location.href = 'braid-cart-2026-07-15.html';
+  }));
 
   // Reflect persisted cart on load (e.g., user came back from detail page)
   updateCartFab();

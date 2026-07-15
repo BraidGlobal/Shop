@@ -175,6 +175,12 @@
       letter-spacing: 0.09em;
       color: rgba(255, 254, 254, 0.6);
     }
+    .nav-logo {
+      height: 40px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
     .cart-dot {
       position: absolute;
       top: -1px; right: -1px;
@@ -267,7 +273,7 @@
 
     /* ============ Product Info (Zone 2B) ============ */
     .product-info {
-      padding: 20px 20px 0;
+      padding: 20px 20px 28px;
     }
 
     .eyebrow {
@@ -726,7 +732,7 @@
     }
 
     @media (max-width: 360px) {
-      .product-info { padding: 16px 16px 0; }
+      .product-info { padding: 16px 16px 24px; }
       .collapse-section { padding: 18px 16px; }
       .pill { padding: 0 12px; font-size: 12px; }
       .review-card { padding: 12px; }
@@ -763,7 +769,7 @@
           <button class="nav-btn" id="back-btn" aria-label="Back">
             <i class="ti ti-chevron-left"></i>
           </button>
-          <span class="breadcrumb">CHARMS</span>
+          <img class="nav-logo" src="assets/braid-logo.png" alt="Braid" />
           <button class="nav-btn" id="cart-btn-top" aria-label="Cart">
             <i class="ti ti-shopping-cart"></i>
             <span class="cart-dot" id="cart-dot-top"></span>
@@ -772,65 +778,27 @@
 
         <!-- ZONE 2A: Hero Carousel -->
         <section class="hero-carousel">
-          <div class="hero-track" id="hero-track">
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=800&q=80');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=800&q=80');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1535556116002-6281ff3e9f36?w=800&q=80');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80');"></div>
-          </div>
+          <!-- Slides are built from the product's images by the script below -->
+          <div class="hero-track" id="hero-track"></div>
           <div class="hero-scrim"></div>
 
-          <div class="slide-counter" id="slide-counter">1 / 5</div>
+          <div class="slide-counter" id="slide-counter">1 / 1</div>
 
           <div class="hero-taps">
             <div id="hero-tap-left"></div>
             <div id="hero-tap-right"></div>
           </div>
 
-          <div class="hero-dots" id="hero-dots">
-            <div class="hero-dot active" data-idx="0"></div>
-            <div class="hero-dot" data-idx="1"></div>
-            <div class="hero-dot" data-idx="2"></div>
-            <div class="hero-dot" data-idx="3"></div>
-            <div class="hero-dot" data-idx="4"></div>
-          </div>
+          <div class="hero-dots" id="hero-dots"></div>
         </section>
 
         <!-- ZONE 2B: Product Info -->
         <section class="product-info">
-          <div class="eyebrow">PLACEHOLDER · COLLECTION</div>
-          <h1 class="title">Product Name Placeholder</h1>
+          <div class="eyebrow">BRAID</div>
+          <h1 class="title"></h1>
           <div class="price-row">
             <span class="price" id="unit-price">$48</span>
             <span class="compare-at">$58</span>
-          </div>
-          <div class="reviews-summary-row">
-            <div class="stars">
-              <i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
-            </div>
-            <span class="review-meta">0.0 (000 reviews)</span>
-          </div>
-
-          <!-- Variants -->
-          <div class="variant-group" data-group="one">
-            <div class="group-label">OPTION ONE PLACEHOLDER</div>
-            <div class="selected-value" data-selected>Selected variant placeholder</div>
-            <div class="pill-row">
-              <button class="pill selected" data-value="Option A">Option A</button>
-              <button class="pill" data-value="Option B">Option B</button>
-              <button class="pill" data-value="Option C">Option C</button>
-            </div>
-          </div>
-
-          <div class="variant-group" data-group="two">
-            <div class="group-label">OPTION TWO PLACEHOLDER</div>
-            <div class="selected-value" data-selected>Selected variant placeholder</div>
-            <div class="pill-row">
-              <button class="pill selected" data-value="Choice 1">Choice 1</button>
-              <button class="pill" data-value="Choice 2">Choice 2</button>
-              <button class="pill" data-value="Choice 3">Choice 3</button>
-            </div>
           </div>
 
           <!-- Quantity -->
@@ -855,91 +823,7 @@
             <i class="ti ti-chevron-down chevron"></i>
           </div>
           <div class="collapse-content">
-            <p class="description-body">Description placeholder. This is where the product description will live once finalized. Replace with real copy describing the charm, its inspiration, and any meaningful details.</p>
-          </div>
-        </section>
-
-        <!-- Materials & Care -->
-        <section class="collapse-section" data-section="materials">
-          <div class="collapse-header">
-            <span class="group-label">MATERIALS &amp; CARE</span>
-            <i class="ti ti-chevron-down chevron"></i>
-          </div>
-          <div class="collapse-content">
-            <div class="materials-list">
-              <div class="material-row">
-                <span class="material-key">Material</span>
-                <span class="material-value">Placeholder</span>
-              </div>
-              <div class="material-row">
-                <span class="material-key">Finish</span>
-                <span class="material-value">Placeholder</span>
-              </div>
-              <div class="material-row">
-                <span class="material-key">Hardware</span>
-                <span class="material-value">Placeholder</span>
-              </div>
-              <div class="material-row">
-                <span class="material-key">Care</span>
-                <span class="material-value">Placeholder care instructions text spanning multiple words to test wrapping</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Reviews -->
-        <section class="collapse-section" data-section="reviews">
-          <div class="collapse-header">
-            <span class="group-label">REVIEWS</span>
-            <i class="ti ti-chevron-down chevron"></i>
-          </div>
-          <div class="collapse-content">
-            <div class="reviews-summary">
-              <div class="rating-big">0.0</div>
-              <div class="stars">
-                <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
-              </div>
-              <div class="based-on">Based on 000 reviews</div>
-            </div>
-
-            <div class="review-card">
-              <div class="review-top">
-                <div class="stars">
-                  <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
-                </div>
-                <div class="review-avatar">P</div>
-                <span class="review-name">Placeholder Name</span>
-                <span class="review-age">00 days ago</span>
-              </div>
-              <div class="review-title">Review title placeholder</div>
-              <div class="review-body">Review body placeholder text that demonstrates how a multi-line review will wrap inside the card with appropriate breathing room.</div>
-            </div>
-
-            <div class="review-card">
-              <div class="review-top">
-                <div class="stars">
-                  <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
-                </div>
-                <div class="review-avatar">P</div>
-                <span class="review-name">Placeholder Name</span>
-                <span class="review-age">00 days ago</span>
-              </div>
-              <div class="review-title">Review title placeholder</div>
-              <div class="review-body">Review body placeholder text that demonstrates how a multi-line review will wrap inside the card with appropriate breathing room.</div>
-            </div>
-
-            <div class="review-card">
-              <div class="review-top">
-                <div class="stars">
-                  <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
-                </div>
-                <div class="review-avatar">P</div>
-                <span class="review-name">Placeholder Name</span>
-                <span class="review-age">00 days ago</span>
-              </div>
-              <div class="review-title">Review title placeholder</div>
-              <div class="review-body">Review body placeholder text that demonstrates how a multi-line review will wrap inside the card with appropriate breathing room.</div>
-            </div>
+            <p class="description-body"></p>
           </div>
         </section>
 
@@ -950,10 +834,6 @@
 
       <!-- ZONE 3: Sticky bottom bar -->
       <div class="bottom-bar">
-        <div class="total-block">
-          <div class="total-label">TOTAL</div>
-          <div class="total-price" id="total-price">$48</div>
-        </div>
         <button class="add-to-cart" id="add-to-cart-btn">
           <i class="ti ti-plus"></i>
           <span>Add to cart · <span id="cta-price">$48</span></span>
@@ -965,7 +845,7 @@
 
       <!-- Toast -->
       <div class="toast" id="toast">
-        <span id="toast-msg">Product Name Placeholder added</span>
+        <span id="toast-msg">Added to cart</span>
         <span class="view-cart" id="toast-view-cart">view cart →</span>
       </div>
 
@@ -976,15 +856,60 @@
 (function() {
   // ============ Product catalog (shared with flow-shop) ============
   const PRODUCTS = [
-    { name: 'Silk Scarf',       price: 38, img: 'assets/silk-scarf.jpg' },
-    { name: 'Charm Keychain',   price: 24, img: 'assets/keychain.jpg' },
-    { name: 'Satin Scrunchie',  price: 14, img: 'assets/satin-scrunchie.jpg' },
-    { name: 'Sticker Sheet',    price: 12, img: 'assets/sticker-sheet.jpg' },
-    { name: 'B Mark',           price: 4,  img: 'assets/b-mark.jpg' },
-    { name: 'Star Boy',         price: 5,  img: 'assets/star-boy.jpg' },
-    { name: 'Star Girl',        price: 5,  img: 'assets/star-girl.jpg' },
-    { name: 'No Bad Hair Days', price: 4,  img: 'assets/no-bad-hair-days.jpg' },
-    { name: 'Speak Up',         price: 5,  img: 'assets/speak-up.jpg' }
+    {
+      name: 'Silk Scarf', price: 12,
+      img: 'assets/scarf-worn.jpg',
+      images: ['assets/scarf-worn.jpg', 'assets/silk-scarf.jpg', 'assets/scarf-front.jpg'],
+      desc: "Lay your edges and elevate any look with our signature plum satin scarf, hand-finished with the Braid 'B' monogram. The buttery-smooth satin glides over hair without snagging or pulling moisture, so your style stays fresh. Wear it as a headband, edge wrap, neck scarf, or bag accent — one scarf, endless ways to style."
+    },
+    {
+      name: 'Charm Keychain', price: 5,
+      img: 'assets/charms-lifestyle-trim.jpg',
+      images: [{ src: 'assets/charms-lifestyle-trim.jpg', fit: 'contain' }, 'assets/keychain.jpg', 'assets/charms-set.jpg'],
+      desc: "A little personality for your keys or bag. This silver charm cluster mixes a raw amethyst drop, glass florals, iridescent hearts, and a celestial moon for that soft, dreamy finish. Each one is assembled by hand, so no two hang exactly alike."
+    },
+    {
+      name: 'Satin Scrunchie', price: 7,
+      img: 'assets/satin-scrunchie.jpg',
+      images: ['assets/satin-scrunchie.jpg', 'assets/scrunchie-worn.jpg'],
+      desc: "The gentlest way to tie up your curls. Our purple satin scrunchie holds your style without the dents, snags, or breakage ordinary elastics leave behind, and the smooth finish helps your hair hold its moisture. Soft enough to sleep in, cute enough to wear all day."
+    },
+    {
+      name: 'Sticker Sheet', price: 8,
+      img: 'assets/sticker-sheet.jpg',
+      images: ['assets/sticker-sheet.jpg', 'assets/sticker-applied.jpg', 'assets/sticker-bag.jpg'],
+      desc: "A full sheet of hair-loving designs made to celebrate every curl, coil, and braid. Printed on durable, water-resistant vinyl that sticks to laptops, water bottles, phone cases, and journals without fading or peeling. The easiest way to rep the culture and your crown."
+    },
+    {
+      name: 'B Mark', price: 2,
+      img: 'assets/b-mark.jpg',
+      images: ['assets/b-mark.jpg', 'assets/sticker-applied.jpg', 'assets/sticker-bag.jpg'],
+      desc: "Our iconic braided 'B' in crisp black and white — the Braid signature in sticker form. Premium water-resistant vinyl that holds up on laptops, bottles, and cases. Small mark, big statement."
+    },
+    {
+      name: 'Star Boy', price: 2,
+      img: 'assets/star-boy.jpg',
+      images: ['assets/star-boy.jpg', 'assets/sticker-applied.jpg', 'assets/sticker-bag.jpg'],
+      desc: "A golden-star portrait celebrating fresh cuts and natural texture. Printed on durable, water-resistant vinyl with a glossy finish that pops on any surface. Shine like the star boy you are."
+    },
+    {
+      name: 'Star Girl', price: 2,
+      img: 'assets/star-girl.jpg',
+      images: ['assets/star-girl.jpg', 'assets/sticker-applied.jpg', 'assets/sticker-bag.jpg'],
+      desc: "A golden-star portrait honoring braids, beads, and Black-girl magic. Durable, water-resistant vinyl with a glossy finish that won't fade or peel. For the girl who was born to stand out."
+    },
+    {
+      name: 'No Bad Hair Days', price: 2,
+      img: 'assets/no-bad-hair-days.jpg',
+      images: ['assets/no-bad-hair-days.jpg', 'assets/sticker-applied.jpg', 'assets/sticker-bag.jpg'],
+      desc: "Say it loud: No Bad Hair Days. A holographic-look statement sticker that turns any laptop or bottle into a daily affirmation. Premium water-resistant vinyl that shines from every angle."
+    },
+    {
+      name: 'Speak Up', price: 2,
+      img: 'assets/speak-up.jpg',
+      images: ['assets/speak-up.jpg', 'assets/sticker-applied.jpg', 'assets/sticker-bag.jpg'],
+      desc: "\"Let your hair do the talking.\" A bold megaphone design for anyone who wears confidence as an accessory. Durable, water-resistant vinyl built to stick around. Make some noise."
+    }
   ];
 
   // Read product from URL ?idx=N, fall back to first product
@@ -992,15 +917,20 @@
   const idx = Math.max(0, Math.min(PRODUCTS.length - 1, parseInt(urlParams.get('idx') || '0', 10) || 0));
   const product = PRODUCTS[idx];
 
-  // Populate hero image (first slide), title, price
-  const firstSlide = document.querySelector('.hero-track .hero-slide');
-  if (firstSlide) firstSlide.style.backgroundImage = `url('${product.img}')`;
+  // Resolve this product's image set (falls back to its single img)
+  const productImages = (Array.isArray(product.images) && product.images.length)
+    ? product.images
+    : [product.img];
+
+  // Populate title, price (hero slides are built in the carousel section)
   const titleEl = document.querySelector('.title');
   if (titleEl) titleEl.textContent = product.name;
+  const descEl = document.querySelector('.description-body');
+  if (descEl && product.desc) descEl.textContent = product.desc;
   const priceMainEl = document.getElementById('unit-price');
   if (priceMainEl) priceMainEl.textContent = '$' + product.price;
   const compareEl = document.querySelector('.compare-at');
-  if (compareEl) compareEl.textContent = '$' + (product.price + 10);
+  if (compareEl) compareEl.style.display = 'none';
 
   // ============ Pricing ============
   const BASE_PRICE = product.price;
@@ -1013,7 +943,7 @@
   function fmt(n) { return '$' + n; }
   function refreshTotal() {
     const total = BASE_PRICE * quantity;
-    totalPriceEl.textContent = fmt(total);
+    if (totalPriceEl) totalPriceEl.textContent = fmt(total);
     const cta = document.getElementById('cta-price');
     if (cta) cta.textContent = fmt(total);
   }
@@ -1056,23 +986,57 @@
 
   // ============ Hero carousel ============
   const heroTrack = document.getElementById('hero-track');
-  const dots = document.querySelectorAll('.hero-dot');
+  const dotsWrap = document.getElementById('hero-dots');
   const counter = document.getElementById('slide-counter');
-  const slideCount = 5;
+  const slideCount = productImages.length;
   const slideDuration = 3000;
   let currentSlide = 0;
   let autoTimer = null;
   let inactivityTimer = null;
   let paused = false;
 
+  // Build slides + dots from this product's images.
+  // An image entry may be a string, or { src, fit } where fit is 'cover' (default) or 'contain'.
+  heroTrack.style.width = (slideCount * 100) + '%';
+  productImages.forEach((item, i) => {
+    const src = typeof item === 'string' ? item : item.src;
+    const fit = (item && typeof item === 'object' && item.fit) ? item.fit : 'cover';
+    const slide = document.createElement('div');
+    slide.className = 'hero-slide';
+    slide.style.width = (100 / slideCount) + '%';
+    slide.style.backgroundImage = `url('${src}')`;
+    slide.style.backgroundSize = fit;
+    heroTrack.appendChild(slide);
+
+    const dot = document.createElement('div');
+    dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+    dot.dataset.idx = i;
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setSlide(i);
+      pauseAuto();
+    });
+    dotsWrap.appendChild(dot);
+  });
+  const dots = dotsWrap.querySelectorAll('.hero-dot');
+
+  // Single-image products: no carousel chrome, no auto-advance
+  const isCarousel = slideCount > 1;
+  if (!isCarousel) {
+    counter.style.display = 'none';
+    dotsWrap.style.display = 'none';
+  }
+
   function setSlide(idx) {
     currentSlide = (idx + slideCount) % slideCount;
-    heroTrack.style.transform = `translateX(-${currentSlide * 20}%)`;
+    heroTrack.style.transform = `translateX(-${currentSlide * (100 / slideCount)}%)`;
     dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
     counter.textContent = `${currentSlide + 1} / ${slideCount}`;
   }
+  setSlide(0);
 
   function startAuto() {
+    if (!isCarousel) return;
     clearTimeout(autoTimer);
     autoTimer = setTimeout(() => {
       setSlide(currentSlide + 1);
@@ -1080,6 +1044,7 @@
     }, slideDuration);
   }
   function pauseAuto() {
+    if (!isCarousel) return;
     paused = true;
     clearTimeout(autoTimer);
     clearTimeout(inactivityTimer);
@@ -1090,20 +1055,14 @@
   }
 
   document.getElementById('hero-tap-left').addEventListener('click', () => {
+    if (!isCarousel) return;
     setSlide(currentSlide - 1);
     pauseAuto();
   });
   document.getElementById('hero-tap-right').addEventListener('click', () => {
+    if (!isCarousel) return;
     setSlide(currentSlide + 1);
     pauseAuto();
-  });
-
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', (e) => {
-      e.stopPropagation();
-      setSlide(i);
-      pauseAuto();
-    });
   });
 
   // Swipe support
@@ -1199,15 +1158,15 @@
   });
 
   document.getElementById('toast-view-cart').addEventListener('click', () => {
-    window.location.href = 'build-braid-flow-cart.html';
+    window.location.href = 'braid-cart-2026-07-15.html';
   });
 
   document.getElementById('cart-btn-top').addEventListener('click', () => {
-    window.location.href = 'build-braid-flow-cart.html';
+    window.location.href = 'braid-cart-2026-07-15.html';
   });
 
   document.getElementById('back-btn').addEventListener('click', () => {
-    window.location.href = 'build-braid-flow-shop.html';
+    window.location.href = 'braid-shop-2026-07-15.html';
   });
 })();
 </script>
