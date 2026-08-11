@@ -1,0 +1,214 @@
+/* =========================================================
+   BRAID DESIGN TOKENS
+   Single source of truth for the Braid visual system.
+   Import this file first in any project:
+   @import url("tokens.css");
+   ========================================================= */
+
+:root {
+  /* ---------- FONT FAMILIES ---------- */
+  --font-display:  "Gyst Variable", "Playfair Display", Georgia, serif;
+  --font-body:     "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-utility:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-system:   "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* ---------- TYPE SCALE ---------- */
+  --fs-display-xl: 42px;   /* Hero & page titles      | Gyst Bold      */
+  --fs-price:      30px;   /* Product pricing         | Roboto Regular */
+  --fs-section:    20px;   /* Section labels          | Gyst Bold      */
+  --fs-product:    21px;   /* Product / article head  | Roboto Regular */
+  --fs-button:     18px;   /* CTA / nav button label  | Roboto Regular */
+  --fs-body:       16px;   /* Body copy               | Roboto Regular */
+  --fs-caption:    14px;   /* Sub-labels              | Roboto Regular */
+  --fs-meta:       12px;   /* Micro labels            | Roboto Regular */
+  --fs-micro:      10px;   /* Ratings, timestamps     | Inter Medium   */
+  --fs-system:     12px;   /* OS chrome               | SF Pro Medium  */
+
+  --lh-tight:   1.10;
+  --lh-snug:    1.25;
+  --lh-normal:  1.45;
+  --lh-relaxed: 1.65;
+
+  --tracking-tight:  -0.01em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-caps:    0.12em;
+
+  /* ---------- BACKGROUNDS ---------- */
+  --bg-deep-indigo:    #18172C;   /* Primary page background */
+  --bg-jet-black:      #171717;   /* NavBar, cards, close buttons */
+  --bg-rich-navy:      #24213C;   /* Sticky headers, tab bars */
+  --bg-medium-purple:  #382A4D;   /* Sections, panel cards */
+  --bg-dark-purple:    #221E3C;   /* Badge & pill backgrounds */
+  --bg-dark-charcoal:  #1F1F22;   /* Toggle base, input fields */
+
+  /* ---------- TEXT ---------- */
+  --text-pure-white:  #FFFEFE;                    /* Primary headings & body */
+  --text-soft-white:  #EFEFEF;                    /* Active nav labels */
+  --text-warm-gray:   #C8BFBD;                    /* Muted / inactive */
+  --text-90:          rgba(255, 255, 255, 0.90);  /* System bar */
+  --text-70:          rgba(255, 255, 255, 0.70);  /* Secondary product info */
+  --text-60:          rgba(255, 255, 255, 0.60);  /* Tertiary labels, prices */
+
+  /* ---------- PURPLE ACCENTS (curated to 2) ---------- */
+  --accent-lavender:    #C8BCF6;   /* Light accent — icons, highlights, soft text */
+  --accent-deep-violet: #5A199B;   /* Dark anchor — emphasis, CTA fill, gradients */
+
+  /* ---------- WARM ACCENTS ---------- */
+  --warm-amber: #FF9033;   /* Progress bars, CTA highlights */
+  --warm-gold:  #FFBF00;   /* Star/badge glow */
+
+  /* ---------- SEMANTIC ALIASES ---------- */
+  --color-bg:           var(--bg-deep-indigo);
+  --color-surface:      var(--bg-rich-navy);
+  --color-surface-2:    var(--bg-medium-purple);
+  --color-surface-3:    var(--bg-dark-purple);
+  --color-input:        var(--bg-dark-charcoal);
+  --color-text:         var(--text-pure-white);
+  --color-text-muted:   var(--text-70);
+  --color-text-subtle:  var(--text-60);
+  --color-primary:      var(--accent-lavender);
+  --color-emphasis:     var(--accent-deep-violet);
+  --color-highlight:    var(--warm-amber);
+
+  /* ---------- GRADIENTS ----------
+     Gradients use additional purple stops (#EBC8FE, #CAA8E9, #A7A4DF, #624884)
+     internally — these are NOT exposed as named accents on purpose. Two
+     accents (Lavender, Deep Violet) remain the only standalone purple tokens.
+  */
+  --grad-page-fade:       radial-gradient(120% 80% at 50% 0%, #2A2350 0%, #18172C 60%, #100F22 100%);
+  --grad-purple-pop:      linear-gradient(135deg, #C8BCF6 0%, #5A199B 100%);
+  --grad-orchid-bloom:    linear-gradient(140deg, #EBC8FE 0%, #CAA8E9 45%, #624884 100%);
+  --grad-border-nebula:   linear-gradient(135deg, #C8BCF6 0%, #624884 50%, #5A199B 100%);
+  --grad-deep-dusk:       linear-gradient(180deg, #382A4D 0%, #221E3C 50%, #18172C 100%);
+  --grad-violet-sterling: linear-gradient(135deg, #A7A4DF 0%, #5A199B 100%);
+  --grad-warm-flare:      linear-gradient(135deg, #FFBF00 0%, #FF9033 100%);
+
+  /* ---------- SPACING ---------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  32px;
+  --space-8:  40px;
+  --space-9:  48px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+
+  /* ---------- RADIUS (curated to 3) ---------- */
+  --radius-sm:    12px;    /* Inputs, badges, tight UI */
+  --radius-lg:    20px;    /* Cards, panels, hero modules */
+  --radius-pill:  999px;   /* Buttons, toggles, tabs */
+
+  /* ---------- BORDER WIDTHS ---------- */
+  --border-hairline: 1px;
+  --border-thin:     1.5px;
+  --border-thick:    2px;
+
+  /* ---------- ELEVATION (shadows) ---------- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.32);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.40);
+  --shadow-xl: 0 28px 64px rgba(0, 0, 0, 0.48);
+  --shadow-glow-violet: 0 0 24px rgba(151, 117, 230, 0.35);
+  --shadow-glow-warm:   0 0 24px rgba(255, 144, 51, 0.32);
+
+  /* ---------- GLASS — GLOSSY (low blur, reflective sheen) ----------
+     Glossy glass = light blur + linear sheen + bright top highlight.
+     Apply --glass-tint (a gradient) as background-image and pair it with
+     a dark base color so the sheen reads on dark surfaces.
+  */
+  --glass-blur:    blur(6px) saturate(160%);
+  --glass-base:    rgba(24, 23, 44, 0.55);          /* dark base under the sheen */
+  --glass-tint:    linear-gradient(180deg,
+                     rgba(255, 255, 255, 0.16) 0%,
+                     rgba(255, 255, 255, 0.06) 38%,
+                     rgba(255, 255, 255, 0.02) 62%,
+                     rgba(255, 255, 255, 0.08) 100%);
+  --glass-tint-lifted: linear-gradient(180deg,
+                     rgba(255, 255, 255, 0.22) 0%,
+                     rgba(255, 255, 255, 0.08) 38%,
+                     rgba(255, 255, 255, 0.03) 62%,
+                     rgba(255, 255, 255, 0.10) 100%);
+  --glass-tint-violet: linear-gradient(180deg,
+                     rgba(200, 188, 246, 0.20) 0%,
+                     rgba(200, 188, 246, 0.06) 38%,
+                     rgba(90, 25, 155, 0.04) 62%,
+                     rgba(200, 188, 246, 0.10) 100%);
+  /* Button-grade violet glass — more saturated so CTAs still pop */
+  --glass-tint-button: linear-gradient(180deg,
+                     rgba(200, 188, 246, 0.30) 0%,
+                     rgba(151, 117, 230, 0.16) 42%,
+                     rgba(90, 25, 155, 0.10) 68%,
+                     rgba(200, 188, 246, 0.20) 100%);
+  --glass-base-button: rgba(58, 24, 110, 0.55);
+  --glass-border:  1px solid rgba(255, 255, 255, 0.18);
+  --glass-border-strong: 1px solid rgba(255, 255, 255, 0.28);
+  --glass-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    0 10px 28px rgba(0, 0, 0, 0.32);
+  --glass-shadow-soft:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 6px 18px rgba(0, 0, 0, 0.26);
+
+  /* ---------- MOTION ---------- */
+  --ease-out:     cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:     120ms;
+  --dur-base:     200ms;
+  --dur-slow:     320ms;
+
+  /* ---------- LAYOUT ---------- */
+  --container-narrow: 720px;
+  --container-base:   1080px;
+  --container-wide:   1400px;
+}
+
+/* =========================================================
+   GLASS UTILITY CLASSES (glossy)
+   ========================================================= */
+.glass {
+  position: relative;
+  background-color: var(--glass-base);
+  background-image: var(--glass-tint);
+  border: var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+}
+.glass--soft {
+  position: relative;
+  background-color: var(--glass-base);
+  background-image: var(--glass-tint);
+  border: var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow-soft);
+  border-radius: var(--radius-sm);
+}
+.glass--lifted {
+  position: relative;
+  background-color: var(--glass-base);
+  background-image: var(--glass-tint-lifted);
+  border: var(--glass-border-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+}
+.glass--violet {
+  position: relative;
+  background-color: rgba(37, 32, 65, 0.55);
+  background-image: var(--glass-tint-violet);
+  border: 1px solid rgba(200, 188, 246, 0.30);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+}

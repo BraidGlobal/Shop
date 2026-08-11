@@ -9,21 +9,22 @@
   <title>Build Braid — Shop (Connected Flow)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/tabler-icons.min.css" />
+  <link rel="stylesheet" href="assets/tokens.css" />
   <style>
     :root {
-      --deep-indigo: #18172C;
-      --medium-purple: #302A4D;
-      --dark-purple: #221E3C;
-      --pure-white: #FFFEFE;
-      --soft-lilac: #E2C5FF;
-      --lavender: #C8BCF6;
-      --deep-violet: #5A199B;
-      --purple-border: #9F75C7;
-      --amber-orange: #FF9D33;
+      --deep-indigo: var(--bg-deep-indigo);
+      --medium-purple: var(--bg-medium-purple);
+      --dark-purple: var(--bg-dark-purple);
+      --pure-white: var(--text-pure-white);
+      --soft-lilac: var(--accent-lavender);
+      --lavender: var(--accent-lavender);
+      --deep-violet: var(--accent-deep-violet);
+      --purple-border: var(--accent-lavender);
+      --amber-orange: var(--warm-amber);
 
-      --font-display: 'Sora', 'Inter', system-ui, sans-serif; /* Gyst Variable fallback */
+      --font-display: 'Gyst Variable', 'Playfair Display', Georgia, serif;
       --font-body: 'Roboto', system-ui, sans-serif;
       --font-ui: 'Inter', system-ui, sans-serif;
     }
@@ -48,7 +49,7 @@
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(226, 197, 255, 0.5);
+      color: rgba(200, 188, 246, 0.5);
       text-align: center;
       max-width: 90%;
       z-index: 1;
@@ -90,7 +91,6 @@
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      scroll-snap-type: y mandatory;
     }
     #scroll-container.snap-off { scroll-snap-type: none; }
     #scroll-container::-webkit-scrollbar { display: none; }
@@ -197,7 +197,7 @@
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(226, 197, 255, 0.35);
+      border: 1px solid rgba(200, 188, 246, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -214,7 +214,7 @@
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(226, 197, 255, 0.35);
+      border: 1px solid rgba(200, 188, 246, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -364,7 +364,7 @@
 
     /* ============ STATE 02: Sticky bar + Grid ============ */
     .grid-state {
-      background: var(--deep-indigo);
+      background: transparent;
       min-height: 100vh;
       min-height: 100dvh;
       padding-bottom: 56px;
@@ -376,7 +376,7 @@
       background: rgba(24, 23, 44, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(159, 117, 199, 0.25);
+      border-bottom: 1px solid rgba(200, 188, 246, 0.25);
       padding: 56px 20px 14px;
       display: flex;
       justify-content: space-between;
@@ -407,7 +407,7 @@
       width: 32px; height: 32px;
       border-radius: 50%;
       background: transparent;
-      border: 1px solid rgba(226, 197, 255, 0.45);
+      border: 1px solid rgba(200, 188, 246, 0.45);
       color: var(--soft-lilac);
       display: flex;
       align-items: center;
@@ -472,11 +472,11 @@
       position: relative;
       background:
         linear-gradient(160deg,
-          rgba(226, 197, 255, 0.14) 0%,
-          rgba(48, 42, 77, 0.55) 35%,
+          rgba(200, 188, 246, 0.14) 0%,
+          rgba(56, 42, 77, 0.55) 35%,
           rgba(34, 30, 60, 0.6) 100%);
-      border: 1px solid rgba(226, 197, 255, 0.22);
-      border-radius: 18px;
+      border: 1px solid rgba(200, 188, 246, 0.22);
+      border-radius: var(--radius-lg);
       overflow: hidden;
       cursor: pointer;
       backdrop-filter: blur(16px) saturate(160%);
@@ -506,7 +506,7 @@
     .product-card:active { transform: scale(0.97); }
     .product-card:hover {
       transform: translateY(-3px);
-      border-color: rgba(226, 197, 255, 0.5);
+      border-color: rgba(200, 188, 246, 0.5);
       box-shadow:
         0 22px 48px rgba(0, 0, 0, 0.5),
         0 6px 20px rgba(90, 25, 155, 0.3),
@@ -523,8 +523,8 @@
     }
     .product-body { padding: 12px; }
     .product-name {
-      font-family: var(--font-display);
-      font-weight: 700;
+      font-family: var(--font-body);
+      font-weight: 500;
       font-size: 14px;
       color: var(--pure-white);
       letter-spacing: -0.01em;
@@ -543,7 +543,7 @@
     .add-btn {
       width: 100%;
       height: 34px;
-      border-radius: 10px;
+      border-radius: var(--radius-pill);
       background: var(--deep-violet);
       color: var(--pure-white);
       border: none;
@@ -563,6 +563,36 @@
     }
     .add-btn:active { transform: scale(0.96); }
     .add-btn.added { background: #2D7A4F; }
+    .add-btn:disabled {
+      background: rgba(255, 254, 254, 0.12);
+      color: rgba(255, 254, 254, 0.45);
+      cursor: not-allowed;
+    }
+
+    /* Live-inventory badges (fed by Shopify) */
+    .product-card { position: relative; }
+    .stock-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(24, 23, 44, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 144, 51, 0.5);
+      color: var(--amber-orange);
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+    .stock-badge.out {
+      border-color: rgba(255, 254, 254, 0.35);
+      color: rgba(255, 254, 254, 0.75);
+    }
 
     /* Scroll dots at end of grid */
     .scroll-dots {
@@ -618,7 +648,7 @@
       background: rgba(90, 25, 155, 0.6);
       backdrop-filter: blur(24px) saturate(150%);
       -webkit-backdrop-filter: blur(24px) saturate(150%);
-      border-left: 1px solid rgba(226, 197, 255, 0.25);
+      border-left: 1px solid rgba(200, 188, 246, 0.25);
       box-shadow: -20px 0 50px rgba(0, 0, 0, 0.45);
       z-index: 85;
       transform: translateX(100%);
@@ -636,13 +666,13 @@
       align-items: center;
       justify-content: space-between;
       padding: 8px 22px 22px;
-      border-bottom: 1px solid rgba(226, 197, 255, 0.18);
+      border-bottom: 1px solid rgba(200, 188, 246, 0.18);
     }
     .drawer-header .brand-logo { height: 36px; }
     .drawer-close {
       width: 36px; height: 36px;
       border-radius: 50%;
-      border: 1px solid rgba(226, 197, 255, 0.35);
+      border: 1px solid rgba(200, 188, 246, 0.35);
       background: rgba(255, 255, 255, 0.08);
       color: var(--soft-lilac);
       display: flex;
@@ -658,12 +688,12 @@
     .drawer-item {
       background: transparent;
       border: none;
-      border-bottom: 1px solid rgba(226, 197, 255, 0.15);
+      border-bottom: 1px solid rgba(200, 188, 246, 0.15);
       padding: 22px 24px;
       color: var(--pure-white);
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 20px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 18px;
       letter-spacing: -0.01em;
       display: flex;
       align-items: center;
@@ -672,8 +702,8 @@
       text-align: left;
       transition: background 200ms, padding-left 200ms;
     }
-    .drawer-item:hover { background: rgba(226, 197, 255, 0.08); padding-left: 28px; }
-    .drawer-item:active { background: rgba(226, 197, 255, 0.18); }
+    .drawer-item:hover { background: rgba(200, 188, 246, 0.08); padding-left: 28px; }
+    .drawer-item:active { background: rgba(200, 188, 246, 0.18); }
     .drawer-item i { color: var(--soft-lilac); font-size: 18px; opacity: 0.8; }
     .drawer-footer {
       margin-top: auto;
@@ -696,7 +726,7 @@
       border-radius: 50%;
       background: var(--deep-violet);
       color: var(--pure-white);
-      border: 1px solid rgba(226, 197, 255, 0.4);
+      border: 1px solid rgba(200, 188, 246, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -798,9 +828,10 @@
       }
       .product-name { font-size: 16px; }
       .product-price { font-size: 17px; }
-      .add-btn { height: 40px; font-size: 14px; border-radius: 12px; }
+      .add-btn { height: 40px; font-size: 14px; border-radius: var(--radius-pill); }
 
-      /* Hero type scales up on larger canvases */
+      /* Hero type scales up on larger canvases — container widens with it */
+      .hero-text { max-width: min(640px, 62vw); }
       .display-headline { font-size: clamp(56px, 8vw, 92px); }
       .subline { font-size: 20px; }
     }
@@ -808,6 +839,60 @@
     @media (min-width: 1100px) {
       #product-grid { grid-template-columns: repeat(4, 1fr); }
       .grid-intro h1 { font-size: 48px; }
+    }
+
+    /* ============ Hero photo-wall mosaic (tablet & desktop) ============ */
+    .hero-mosaic { display: none; }
+
+    @media (min-width: 768px) {
+      /* Reels are a phone interaction — swap in the animated photo wall */
+      #reels-track, #touch-zone, .progress { display: none; }
+
+      .hero-mosaic {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        padding: 0 18px;
+        z-index: 1; /* under .hero-scrim (z 2) so the headline stays readable */
+        overflow: hidden;
+        background: var(--medium-purple);
+      }
+      .mosaic-col { overflow: hidden; }
+      .mosaic-track {
+        display: flex;
+        flex-direction: column;
+        animation: mosaic-drift 52s linear infinite;
+        will-change: transform;
+      }
+      .mosaic-tile {
+        flex: none;
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        margin-bottom: 18px;
+        border-radius: var(--radius-lg);
+        background-size: cover;
+        background-position: center;
+        background-color: var(--dark-purple);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+      .mosaic-tile.sq { aspect-ratio: 1 / 1; }
+
+      /* Stagger: alternating directions, varied speeds, phase offsets */
+      .mosaic-col:nth-child(1) .mosaic-track { animation-duration: 52s; }
+      .mosaic-col:nth-child(2) .mosaic-track { animation-direction: reverse; animation-duration: 64s; animation-delay: -18s; }
+      .mosaic-col:nth-child(3) .mosaic-track { animation-duration: 58s; animation-delay: -30s; }
+      .mosaic-col:nth-child(4) .mosaic-track { animation-direction: reverse; animation-duration: 47s; animation-delay: -9s; }
+
+      @keyframes mosaic-drift {
+        from { transform: translateY(0); }
+        to   { transform: translateY(-50%); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mosaic-track { animation: none; }
+      }
     }
 
     /* ============ Mobile (real device) ============ */
@@ -873,7 +958,7 @@
       .display-headline { font-size: 30px; }
       .hero-text { left: 24px; bottom: 120px; max-width: 220px; }
       .product-grid { padding: 14px; gap: 14px 10px; }
-      .product-card { border-radius: 16px; }
+      .product-card { border-radius: var(--radius-lg); }
       .card-name { font-size: 13px; }
       .card-price { font-size: 14px; }
       .reels-nav { padding: 0 16px; }
@@ -917,6 +1002,9 @@
             <div class="reel-slide" style="background-image: url('assets/hero-03.jpg');"></div>
             <div class="reel-slide" style="background-image: url('assets/sticker-bag.jpg');"></div>
           </div>
+
+          <!-- Photo-wall mosaic (tablet & desktop hero) — built by script -->
+          <div class="hero-mosaic" id="hero-mosaic" aria-hidden="true"></div>
 
           <div class="hero-scrim"></div>
 
@@ -1034,6 +1122,36 @@
   </div>
 
 <script>
+  // ============ Hero photo-wall mosaic (tablet & desktop) ============
+  (function buildMosaic() {
+    const wrap = document.getElementById('hero-mosaic');
+    if (!wrap) return;
+    // 24 photos, 6 per column
+    const cols = [
+      ['hero-01.jpg', 'silk-scarf.jpg', 'charms-lifestyle-trim.jpg', 'star-boy.jpg', 'scarf-worn.jpg', 'sticker-sheet.jpg'],
+      ['sticker-bag.jpg', 'satin-scrunchie.jpg', 'hero-02.jpg', 'speak-up.jpg', 'charms-set.jpg'],
+      ['scrunchie-worn.jpg', 'keychain.jpg', 'sticker-applied.jpg', 'hero-03.jpg', 'star-girl.jpg', 'charms-lifestyle-square.jpg'],
+      ['scarf-front.jpg', 'no-bad-hair-days.jpg', 'hero-04.jpg', 'charms-lifestyle-crop.jpg', 'IMG_2822 2.jpg']
+    ];
+    // which tile positions render square, per column (adds the staggered rhythm)
+    const sq = [[1, 4], [0, 3], [2, 5], [1, 3]];
+    cols.forEach((files, c) => {
+      const col = document.createElement('div');
+      col.className = 'mosaic-col';
+      const track = document.createElement('div');
+      track.className = 'mosaic-track';
+      // sequence duplicated exactly so the -50% translate loops seamlessly
+      [...files, ...files].forEach((f, i) => {
+        const tile = document.createElement('div');
+        tile.className = 'mosaic-tile' + (sq[c].includes(i % files.length) ? ' sq' : '');
+        tile.style.backgroundImage = "url('assets/" + f + "')";
+        track.appendChild(tile);
+      });
+      col.appendChild(track);
+      wrap.appendChild(col);
+    });
+  })();
+
 (function() {
   // ============ Products ============
   const products = [
@@ -1045,11 +1163,13 @@
     { name: 'Star Boy',         price: 2,  img: 'assets/star-boy.jpg' },
     { name: 'Star Girl',        price: 2,  img: 'assets/star-girl.jpg' },
     { name: 'No Bad Hair Days', price: 2,  img: 'assets/no-bad-hair-days.jpg' },
-    { name: 'Speak Up',         price: 2,  img: 'assets/speak-up.jpg' }
+    { name: 'Speak Up',         price: 2,  img: 'assets/speak-up.jpg' },
+    { name: 'Charm Add-On',     price: 2,  img: 'assets/charms-set.jpg', addon: true }
   ];
 
   const grid = document.getElementById('product-grid');
   products.forEach((p, i) => {
+    if (p.addon) return; // add-ons are offered on their parent product's page, not in the grid
     const card = document.createElement('div');
     card.className = 'product-card';
     card.innerHTML = `
@@ -1135,6 +1255,10 @@
       e.stopPropagation();
       const idx = parseInt(btn.dataset.idx, 10);
       const p = products[idx];
+      if (p.available === false || p.stock === 0) { showToast(`${p.name} · sold out`); return; }
+      if (p.stock != null && (readCart()[String(idx)] || 0) >= p.stock) {
+        showToast(`Only ${p.stock} in stock`); return;
+      }
       addToCart(idx, 1);
       cartCount = getCartCount();
       updateCartFab(true);
@@ -1183,7 +1307,7 @@
         } else if (action === 'about') {
           showToast('About Braid');
         } else if (action === 'shipping') {
-          showToast('Shipping Policy');
+          window.location.href = 'build-braid-flow-shipping.html';
         }
       }, 280);
     });
@@ -1211,6 +1335,7 @@
 
   function goToSlide(idx, restart = true) {
     currentSlide = (idx + slideCount) % slideCount;
+    if (window.BraidFX && BraidFX.heroSlide) BraidFX.heroSlide(currentSlide);
     track.style.transform = `translateX(-${currentSlide * (100 / slideCount)}%)`;
     fills.forEach((f, i) => {
       if (i < currentSlide) f.style.width = '100%';
@@ -1286,8 +1411,58 @@
     scrollContainer.scrollTo({ top: 820, behavior: 'smooth' });
   });
 
+  // Let the FX layer pause/resume the reel during press-and-hold
+  window.__braidHero = { pause: pauseCarousel, resume: resumeCarousel };
+
+  // ============ Live inventory (Shopify Storefront API) ============
+  window.__braidCatalog = {
+    products,
+    onSync() {
+      document.querySelectorAll('.product-card').forEach(card => {
+        const btn = card.querySelector('.add-btn');
+        if (!btn) return;
+        const p = products[parseInt(btn.dataset.idx, 10)];
+        if (!p) return;
+        const priceEl = card.querySelector('.product-price');
+        if (priceEl) priceEl.textContent = '$' + p.price;
+        let badge = card.querySelector('.stock-badge');
+        const soldOut = p.available === false || p.stock === 0;
+        const low = !soldOut && p.stock != null && p.stock <= 3;
+        if (soldOut || low) {
+          if (!badge) { badge = document.createElement('span'); badge.className = 'stock-badge'; card.appendChild(badge); }
+          badge.textContent = soldOut ? 'Sold out' : `Only ${p.stock} left`;
+          badge.classList.toggle('out', soldOut);
+        } else if (badge) badge.remove();
+        if (soldOut) { btn.disabled = true; btn.textContent = 'Sold out'; }
+      });
+    }
+  };
+
   startAutoAdvance();
 })();
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.8/dist/lenis.min.js"></script>
+  <script src="assets/braid-fx.js"></script>
+  <script>
+  BraidFX.init({
+    colorStops: [[0, '#2A2350'], [0.45, '#18172C'], [1, '#100F22']],
+    heroSnap: '#hero-section',
+    liquid: { host: '#hero-section' },
+    intro: { logo: 'assets/braid-logo.png' },
+    heroCarousel: {
+      images: ['assets/hero-01.jpg', 'assets/hero-02.jpg', 'assets/hero-03.jpg', 'assets/sticker-bag.jpg']
+    },
+    wallDepth: true,
+    unveil: true,
+    chip: true,
+    magnetic: ['#scroll-cue'],
+    reveal: [
+      { selector: '.grid-intro' },
+      { selector: '.product-card', stagger: 26 }
+    ]
+  });
+  </script>
+  <script src="assets/shopify.js"></script>
+  <script>BraidShopify.autoSync();</script>
 </body>
 </html>

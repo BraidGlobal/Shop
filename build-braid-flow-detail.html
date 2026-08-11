@@ -9,23 +9,24 @@
   <title>Build Braid — Product Detail (Connected Flow)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/tabler-icons.min.css" />
+  <link rel="stylesheet" href="assets/tokens.css" />
   <style>
     :root {
-      --deep-indigo: #18172C;
-      --medium-purple: #302A4D;
-      --dark-purple: #221E3C;
-      --pure-white: #FFFEFE;
-      --soft-lilac: #E2C5FF;
-      --lavender: #C8BCF6;
-      --deep-violet: #5A199B;
+      --deep-indigo: var(--bg-deep-indigo);
+      --medium-purple: var(--bg-medium-purple);
+      --dark-purple: var(--bg-dark-purple);
+      --pure-white: var(--text-pure-white);
+      --soft-lilac: var(--accent-lavender);
+      --lavender: var(--accent-lavender);
+      --deep-violet: var(--accent-deep-violet);
       --deep-violet-hover: #6B25B0;
-      --purple-border: #9F75C7;
-      --amber-orange: #FF9D33;
+      --purple-border: var(--accent-lavender);
+      --amber-orange: var(--warm-amber);
       --success-green: #2D7A4F;
 
-      --font-display: 'Sora', 'Inter', system-ui, sans-serif;
+      --font-display: 'Gyst Variable', 'Playfair Display', Georgia, serif;
       --font-body: 'Roboto', system-ui, sans-serif;
       --font-ui: 'Inter', system-ui, sans-serif;
     }
@@ -50,7 +51,7 @@
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(226, 197, 255, 0.5);
+      color: rgba(200, 188, 246, 0.5);
       text-align: center;
       max-width: 90%;
       z-index: 1;
@@ -124,7 +125,7 @@
       background: rgba(24, 23, 44, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(159, 117, 199, 0.2);
+      border-bottom: 1px solid rgba(200, 188, 246, 0.2);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -134,7 +135,7 @@
       width: 32px; height: 32px;
       border-radius: 50%;
       background: transparent;
-      border: 1px solid rgba(226, 197, 255, 0.4);
+      border: 1px solid rgba(200, 188, 246, 0.4);
       color: var(--soft-lilac);
       display: flex;
       align-items: center;
@@ -143,7 +144,7 @@
       position: relative;
       transition: border-color 0.2s, background 0.2s;
     }
-    .nav-btn:hover { border-color: rgba(226, 197, 255, 0.8); background: rgba(255, 255, 255, 0.04); }
+    .nav-btn:hover { border-color: rgba(200, 188, 246, 0.8); background: rgba(255, 255, 255, 0.04); }
     .nav-btn:active { transform: scale(0.94); }
     .nav-btn i { font-size: 16px; }
     .breadcrumb {
@@ -263,8 +264,8 @@
       color: var(--soft-lilac);
     }
     .title {
-      font-family: var(--font-display);
-      font-weight: 700;
+      font-family: var(--font-body);
+      font-weight: 500;
       font-size: 28px;
       line-height: 1.1;
       letter-spacing: -0.02em;
@@ -338,7 +339,7 @@
       padding: 0 16px;
       border-radius: 999px;
       background: var(--medium-purple);
-      border: 1px solid rgba(159, 117, 199, 0.3);
+      border: 1px solid rgba(200, 188, 246, 0.3);
       font-family: var(--font-body);
       font-weight: 400;
       font-size: 13px;
@@ -349,10 +350,10 @@
       justify-content: center;
       transition: background 0.2s, border-color 0.2s, color 0.2s;
     }
-    .pill:hover { border-color: rgba(159, 117, 199, 0.5); }
+    .pill:hover { border-color: rgba(200, 188, 246, 0.5); }
     .pill.selected {
       background: var(--deep-violet);
-      border-color: rgba(226, 197, 255, 0.6);
+      border-color: rgba(200, 188, 246, 0.6);
       color: var(--pure-white);
     }
 
@@ -368,7 +369,7 @@
       width: 40px; height: 40px;
       border-radius: 12px;
       background: var(--medium-purple);
-      border: 1px solid rgba(159, 117, 199, 0.3);
+      border: 1px solid rgba(200, 188, 246, 0.3);
       color: var(--soft-lilac);
       display: flex;
       align-items: center;
@@ -377,7 +378,7 @@
       transition: background 0.2s, border-color 0.2s, opacity 0.2s;
     }
     .qty-btn:hover:not(:disabled) {
-      border-color: rgba(226, 197, 255, 0.5);
+      border-color: rgba(200, 188, 246, 0.5);
     }
     .qty-btn:active:not(:disabled) { transform: scale(0.94); }
     .qty-btn:disabled {
@@ -400,7 +401,7 @@
     /* ============ Collapsible Sections ============ */
     .collapse-section {
       padding: 20px;
-      border-top: 1px solid rgba(159, 117, 199, 0.15);
+      border-top: 1px solid rgba(200, 188, 246, 0.15);
     }
     .collapse-section:first-of-type { border-top: none; }
     .collapse-header {
@@ -449,7 +450,7 @@
       justify-content: space-between;
       gap: 16px;
       padding: 12px 0;
-      border-bottom: 1px solid rgba(159, 117, 199, 0.15);
+      border-bottom: 1px solid rgba(200, 188, 246, 0.15);
     }
     .material-row:last-child { border-bottom: none; }
     .material-key {
@@ -471,12 +472,12 @@
     .reviews-summary {
       text-align: center;
       padding: 8px 0 20px;
-      border-bottom: 1px solid rgba(159, 117, 199, 0.15);
+      border-bottom: 1px solid rgba(200, 188, 246, 0.15);
       margin-bottom: 16px;
     }
     .reviews-summary .rating-big {
-      font-family: var(--font-display);
-      font-weight: 700;
+      font-family: var(--font-ui);
+      font-weight: 600;
       font-size: 36px;
       color: var(--pure-white);
       letter-spacing: -0.02em;
@@ -494,7 +495,7 @@
     }
     .review-card {
       background: var(--medium-purple);
-      border: 1px solid rgba(159, 117, 199, 0.2);
+      border: 1px solid rgba(200, 188, 246, 0.2);
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 12px;
@@ -557,7 +558,7 @@
       background: rgba(24, 23, 44, 0.92);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border-top: 1px solid rgba(159, 117, 199, 0.25);
+      border-top: 1px solid rgba(200, 188, 246, 0.25);
       box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
       display: flex;
       align-items: center;
@@ -586,7 +587,7 @@
       height: 52px;
       background: var(--deep-violet);
       border: none;
-      border-radius: 14px;
+      border-radius: var(--radius-pill);
       color: var(--pure-white);
       font-family: var(--font-body);
       font-weight: 500;
@@ -657,6 +658,64 @@
     }
 
     /* ============ Mobile (real device) ============ */
+    /* ============ Add-on row (Charm Keychain) ============ */
+    .addon-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: var(--space-3);
+      padding: 14px;
+      border: 1px solid rgba(200, 188, 246, 0.25);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .addon-row:hover { border-color: rgba(200, 188, 246, 0.5); }
+    .addon-row input { position: absolute; opacity: 0; pointer-events: none; }
+    .addon-box {
+      flex: none;
+      width: 22px; height: 22px;
+      border-radius: 7px;
+      border: 1.5px solid rgba(200, 188, 246, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .addon-box i { font-size: 14px; }
+    .addon-row input:checked + .addon-box {
+      background: var(--deep-violet);
+      border-color: var(--soft-lilac);
+      color: var(--pure-white);
+    }
+    .addon-row:has(input:checked) {
+      border-color: var(--soft-lilac);
+      background: rgba(200, 188, 246, 0.08);
+    }
+    .addon-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .addon-name {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--pure-white);
+    }
+    .addon-note {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: rgba(255, 254, 254, 0.55);
+    }
+    .addon-price {
+      margin-left: auto;
+      flex: none;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--soft-lilac);
+    }
+
     /* ============ Tablet & Desktop — two-column PDP ============ */
     @media (min-width: 768px) {
       /* Center nav content to the same column as the body */
@@ -847,6 +906,20 @@
               </button>
             </div>
           </div>
+
+          <!-- Add-on (shown for Charm Keychain only) -->
+          <div class="variant-group" id="addon-group" style="display: none;">
+            <div class="group-label">ADD-ON</div>
+            <label class="addon-row">
+              <input type="checkbox" id="addon-check" />
+              <span class="addon-box"><i class="ti ti-check"></i></span>
+              <span class="addon-info">
+                <span class="addon-name">Extra charm</span>
+                <span class="addon-note">One more hand-picked charm on your cluster</span>
+              </span>
+              <span class="addon-price">+$2</span>
+            </label>
+          </div>
         </section>
 
         <!-- ZONE 2B Section 4: Description -->
@@ -943,6 +1016,12 @@
       img: 'assets/speak-up.jpg',
       images: ['assets/speak-up.jpg', 'assets/sticker-applied.jpg', 'assets/sticker-bag.jpg'],
       desc: "\"Let your hair do the talking.\" A bold megaphone design for anyone who wears confidence as an accessory. Durable, water-resistant vinyl built to stick around. Make some noise."
+    },
+    {
+      name: 'Charm Add-On', price: 2, addon: true,
+      img: 'assets/charms-set.jpg',
+      images: ['assets/charms-set.jpg', 'assets/keychain.jpg'],
+      desc: "One more hand-picked charm clipped onto your keychain cluster — a little extra sparkle for $2. Added alongside your Charm Keychain."
     }
   ];
 
@@ -976,7 +1055,7 @@
 
   function fmt(n) { return '$' + n; }
   function refreshTotal() {
-    const total = BASE_PRICE * quantity;
+    const total = unitTotal();
     if (totalPriceEl) totalPriceEl.textContent = fmt(total);
     const cta = document.getElementById('cta-price');
     if (cta) cta.textContent = fmt(total);
@@ -991,7 +1070,26 @@
   }
 
   qtyMinusBtn.addEventListener('click', () => setQuantity(quantity - 1));
-  qtyPlusBtn.addEventListener('click', () => setQuantity(quantity + 1));
+  qtyPlusBtn.addEventListener('click', () => {
+    if (product.stock != null && quantity >= product.stock) return; // live stock cap
+    setQuantity(quantity + 1);
+  });
+
+  // ============ Add-on (Charm Keychain only) ============
+  const ADDON_IDX = PRODUCTS.findIndex(p => p.addon);
+  const ADDON_PRICE = ADDON_IDX >= 0 ? PRODUCTS[ADDON_IDX].price : 0;
+  const addonCheck = document.getElementById('addon-check');
+  let addonOn = false;
+  if (product.name === 'Charm Keychain' && ADDON_IDX >= 0 && addonCheck) {
+    document.getElementById('addon-group').style.display = '';
+    addonCheck.addEventListener('change', () => {
+      addonOn = addonCheck.checked;
+      refreshTotal();
+    });
+  }
+  // Per-unit total: each keychain gets its add-on
+  function unitTotal() { return (BASE_PRICE + (addonOn ? ADDON_PRICE : 0)) * quantity; }
+
   refreshTotal();
 
   // ============ Variant pills ============
@@ -1169,23 +1267,24 @@
 
   function renderCtaDefault() {
     addBtn.classList.remove('added');
-    addBtn.innerHTML = '<i class="ti ti-plus"></i><span>Add to cart · <span id="cta-price">' + fmt(BASE_PRICE * quantity) + '</span></span>';
+    addBtn.innerHTML = '<i class="ti ti-plus"></i><span>Add to cart · <span id="cta-price">' + fmt(unitTotal()) + '</span></span>';
   }
 
   addBtn.addEventListener('click', () => {
     addToCart(idx, quantity);
+    if (addonOn && ADDON_IDX >= 0) addToCart(ADDON_IDX, quantity);
     refreshCartIndicator();
 
     // Flash button
     addBtn.classList.add('added');
-    addBtn.innerHTML = '<i class="ti ti-check"></i><span>Added · ' + fmt(BASE_PRICE * quantity) + '</span>';
+    addBtn.innerHTML = '<i class="ti ti-check"></i><span>Added · ' + fmt(unitTotal()) + '</span>';
     clearTimeout(resetBtnTimer);
     resetBtnTimer = setTimeout(() => {
       renderCtaDefault();
     }, 1200);
 
     // Toast
-    toastMsg.textContent = product.name + ' added';
+    toastMsg.textContent = product.name + (addonOn ? ' + add-on' : '') + ' added';
     toast.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
@@ -1202,7 +1301,57 @@
   document.getElementById('back-btn').addEventListener('click', () => {
     window.location.href = 'build-braid-flow-shop.html';
   });
+
+  // ============ Live inventory (Shopify Storefront API) ============
+  window.__braidCatalog = {
+    products: PRODUCTS,
+    onSync() {
+      // price may have changed in Shopify — refresh displays
+      if (priceMainEl) priceMainEl.textContent = '$' + product.price;
+
+      // stock note under the price
+      let note = document.getElementById('stock-note');
+      if (!note && priceMainEl) {
+        note = document.createElement('p');
+        note.id = 'stock-note';
+        note.style.cssText =
+          'margin:6px 0 0;font-family:var(--font-ui);font-weight:500;font-size:11px;' +
+          'letter-spacing:0.08em;text-transform:uppercase;color:var(--soft-lilac);';
+        priceMainEl.insertAdjacentElement('afterend', note);
+      }
+
+      const soldOut = product.available === false || product.stock === 0;
+      if (note) {
+        if (soldOut) { note.textContent = 'Sold out'; note.style.color = 'rgba(255,254,254,0.6)'; }
+        else if (product.stock != null && product.stock <= 5) { note.textContent = `Only ${product.stock} left`; note.style.color = 'var(--amber-orange)'; }
+        else if (product.stock != null) { note.textContent = 'In stock'; }
+        else note.remove();
+      }
+
+      const cta = document.getElementById('add-to-cart-btn');
+      if (soldOut && cta) {
+        cta.disabled = true;
+        cta.style.background = 'rgba(255,254,254,0.12)';
+        cta.style.color = 'rgba(255,254,254,0.45)';
+        cta.style.cursor = 'not-allowed';
+        cta.innerHTML = '<span>Sold out</span>';
+        qtyPlusBtn.disabled = true;
+        qtyMinusBtn.disabled = true;
+      } else if (product.stock != null && quantity > product.stock) {
+        setQuantity(product.stock); // clamp to what's actually available
+      }
+    }
+  };
 })();
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.8/dist/lenis.min.js"></script>
+  <script src="assets/braid-fx.js"></script>
+  <script>
+  BraidFX.init({
+    colorStops: [[0, '#18172C'], [1, '#221E3C']]
+  });
+  </script>
+  <script src="assets/shopify.js"></script>
+  <script>BraidShopify.autoSync();</script>
 </body>
 </html>
