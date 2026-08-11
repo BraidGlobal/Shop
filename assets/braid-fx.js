@@ -368,8 +368,9 @@ uniform float u_progress;  /* dissolve 0..1 */
 uniform float u_kb0;       /* ken burns scale current */
 uniform float u_kb1;       /* ken burns scale next */
 uniform vec4  u_trail[${TRAIL}];
-uniform vec3  u_bulge;     /* x, y (top-down uv), amount */
+uniform vec3  u_bulge;     /* x, y (top-down uv, hero space), amount */
 uniform float u_reveal;    /* luminance unveil 0..1.3 */
+uniform float u_cov;       /* heroHeight / canvasHeight (canvas bleeds above) */
 ${GLSL_NOISE}
 vec2 cover(vec2 uv, float imgAspect, float canvasAspect, float scale) {
   vec2 p = uv - 0.5;
@@ -383,13 +384,14 @@ void main() {
   uv.y = 1.0 - uv.y;                 /* top-down, image space */
   float ca = u_res.x / u_res.y;
 
-  /* ripple bend from the shared liquid trail (trail y is bottom-up) */
+  /* ripple bend from the shared liquid trail (trail y is bottom-up, hero
+     space — remap into this canvas, whose top bleeds above the hero) */
   vec2 p = vec2(uv.x * ca, 1.0 - uv.y);
   vec2 disp = vec2(0.0);
   for (int i = 0; i < ${TRAIL}; i++) {
     vec4 tr = u_trail[i];
     if (tr.w <= 0.001) continue;
-    vec2 tp = vec2(tr.x * ca, tr.y);
+    vec2 tp = vec2(tr.x * ca, tr.y * u_cov);
     float d = distance(p, tp);
     float wave = sin(d * 30.0 - tr.z * 5.0) * exp(-d * 4.5) * exp(-tr.z * 1.6) * tr.w;
     disp += normalize(p - tp + vec2(1e-4)) * wave * 0.012;
@@ -398,7 +400,7 @@ void main() {
 
   /* hold lens — gentle magnification around the held point */
   if (u_bulge.z > 0.001) {
-    vec2 bp = u_bulge.xy;
+    vec2 bp = vec2(u_bulge.x, u_bulge.y * u_cov + (1.0 - u_cov));
     vec2 d2 = vec2((buv.x - bp.x) * ca, buv.y - bp.y);
     float fall = exp(-dot(d2, d2) / 0.09);
     buv = bp + (buv - bp) * (1.0 - u_bulge.z * fall);
@@ -430,12 +432,24 @@ void main() {
 }`;
 
   function createHeroCarousel(host, imageUrls, sharedTrail) {
+    // canvas bleeds above the hero so iOS overscroll shows photo, not backdrop
+    const BLEED = 140;
     const canvas = document.createElement('canvas');
     canvas.className = 'braid-fx-hero';
     canvas.style.cssText =
-      'position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;' +
+      'position:absolute;left:0;right:0;top:-' + BLEED + 'px;width:100%;' +
+      'height:calc(100% + ' + BLEED + 'px);z-index:1;pointer-events:none;' +
       'opacity:0;transition:opacity 600ms ease;';
     host.insertBefore(canvas, host.firstChild);
+
+    function fitBleedCanvas() {
+      const w = Math.floor(host.clientWidth * DPR);
+      const h = Math.floor((host.clientHeight + BLEED) * DPR);
+      if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
+        canvas.width = w; canvas.height = h;
+        gl.viewport(0, 0, w, h);
+      }
+    }
 
     const gl = canvas.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: false, powerPreference: 'low-power' });
     if (!gl) { canvas.remove(); return null; }
@@ -447,7 +461,7 @@ void main() {
 
     const U = {};
     ['u_res', 'u_time', 'u_tex0', 'u_tex1', 'u_aspect0', 'u_aspect1', 'u_progress',
-     'u_kb0', 'u_kb1', 'u_trail', 'u_bulge', 'u_reveal'].forEach(
+     'u_kb0', 'u_kb1', 'u_trail', 'u_bulge', 'u_reveal', 'u_cov'].forEach(
       (n) => (U[n] = gl.getUniformLocation(prog, n))
     );
 
@@ -503,13 +517,13 @@ void main() {
       state.slideStart = performance.now();
     }
 
-    fitCanvas(canvas, host, gl);
-    window.addEventListener('resize', () => fitCanvas(canvas, host, gl));
+    fitBleedCanvas();
+    window.addEventListener('resize', fitBleedCanvas);
 
     const emptyTrail = new Float32Array(TRAIL * 4);
     function frame(timeMs) {
       if (!ready) return;
-      fitCanvas(canvas, host, gl);
+      fitBleedCanvas();
       if (canvas.width === 0) return;
 
       // dissolve progress
@@ -552,6 +566,7 @@ void main() {
       gl.uniform4fv(U.u_trail, sharedTrail || emptyTrail);
       gl.uniform3f(U.u_bulge, state.bulge[0], state.bulge[1], state.bulge[2]);
       gl.uniform1f(U.u_reveal, state.reveal);
+      gl.uniform1f(U.u_cov, host.clientHeight / (host.clientHeight + BLEED));
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
 
