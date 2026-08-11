@@ -961,11 +961,14 @@ void main() {
 
       // direction-aware snap between hero and the grid: commit to whichever
       // side the user is heading toward; never interferes inside the grid.
-      const snapHero = config.heroSnap ? document.querySelector(config.heroSnap) : null;
+      // Desktop-only — touch devices use native CSS scroll snap instead
+      // (iOS momentum sends pointercancel + reverse deltas that misfire this).
+      const snapHero = (config.heroSnap && FINE_POINTER) ? document.querySelector(config.heroSnap) : null;
       if (snapHero && this.lenis) {
         let snapTimer = null, snapping = false, lastY = wrapper.scrollTop, dirDown = true, pointerHeld = false;
         wrapper.addEventListener('pointerdown', () => { pointerHeld = true; }, { passive: true });
         window.addEventListener('pointerup', () => { pointerHeld = false; }, { passive: true });
+        window.addEventListener('pointercancel', () => { pointerHeld = false; }, { passive: true });
         const trySnap = () => {
           if (snapping || pointerHeld) return;
           const y = wrapper.scrollTop, hh = snapHero.offsetHeight;
