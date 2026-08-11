@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Roboto:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/tabler-icons.min.css" />
-  <link rel="stylesheet" href="assets/tokens.css?v=20260810c" />
+  <link rel="stylesheet" href="assets/tokens.css?v=20260810d" />
   <style>
     :root {
       --deep-indigo: var(--bg-deep-indigo);
@@ -378,6 +378,10 @@
     .sticky-bar {
       position: sticky;
       top: 0;
+      /* own compositor layer — keeps iOS from letting the pinned bar lag
+         and detach (purple gap) when scroll velocity changes abruptly */
+      transform: translateZ(0);
+      will-change: transform;
       background: rgba(24, 23, 44, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -1410,8 +1414,10 @@
   function armSnap() {
     clearTimeout(snapIdleTimer);
     snapIdleTimer = setTimeout(() => {
+      if (touching) return; // finger still down — wait for touchend to re-arm
       const y = scrollContainer.scrollTop;
-      if (!touching && y < heroHeight * 0.5) scrollContainer.classList.remove('snap-off');
+      if (y >= heroHeight) scrollContainer.classList.add('snap-off');       // settled in grid: free scroll
+      else if (y < heroHeight * 0.5) scrollContainer.classList.remove('snap-off'); // settled near hero: snap active
     }, 160);
   }
 
@@ -1421,13 +1427,10 @@
     if (y > 600) pauseCarousel();
     else resumeCarousel();
 
-    // Free scroll within the grid; re-arm the hero snap only after the
-    // gesture fully settles (idle + finger lifted), never mid-scroll.
-    if (y >= heroHeight) {
-      scrollContainer.classList.add('snap-off');
-    } else if (y < heroHeight * 0.5) {
-      armSnap();
-    }
+    // NEVER flip scroll-snap-type mid-gesture — iOS aborts its scroll
+    // animation and the sticky bar's layer visibly detaches. All snap
+    // changes wait for the gesture to fully settle (idle + finger up).
+    armSnap();
   });
 
   scrollCue.addEventListener('click', () => {
@@ -1465,7 +1468,7 @@
 })();
 </script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.8/dist/lenis.min.js"></script>
-  <script src="assets/braid-fx.js?v=20260810c"></script>
+  <script src="assets/braid-fx.js?v=20260810d"></script>
   <script>
   BraidFX.init({
     colorStops: [[0, '#2A2350'], [0.45, '#18172C'], [1, '#100F22']],
@@ -1485,7 +1488,7 @@
     ]
   });
   </script>
-  <script src="assets/shopify.js?v=20260810c"></script>
+  <script src="assets/shopify.js?v=20260810d"></script>
   <script>BraidShopify.autoSync();</script>
 </body>
 </html>
