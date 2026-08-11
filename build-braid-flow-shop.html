@@ -91,6 +91,7 @@
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+      overscroll-behavior-y: contain; /* keep edge bounce from chaining/flashing */
     }
     /* Touch devices snap natively (the JS snap is desktop-only) */
     @media (pointer: coarse) {
@@ -1397,17 +1398,35 @@
   const scrollContainer = document.getElementById('scroll-container');
   const scrollCue = document.getElementById('scroll-cue');
   const heroHeight = heroSection.offsetHeight; // 820px
+  // Track touch so snap never re-engages while a finger is on the glass —
+  // flipping scroll-snap-type mid-gesture makes iOS jump the page.
+  let touching = false, snapIdleTimer = null;
+  scrollContainer.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+  window.addEventListener('touchend', () => {
+    touching = false;
+    armSnap(); // re-check once the finger lifts
+  }, { passive: true });
+
+  function armSnap() {
+    clearTimeout(snapIdleTimer);
+    snapIdleTimer = setTimeout(() => {
+      const y = scrollContainer.scrollTop;
+      if (!touching && y < heroHeight * 0.5) scrollContainer.classList.remove('snap-off');
+    }, 160);
+  }
+
   scrollContainer.addEventListener('scroll', () => {
     const y = scrollContainer.scrollTop;
     scrollCue.style.opacity = y > 60 ? '0' : '1';
     if (y > 600) pauseCarousel();
     else resumeCarousel();
 
-    // Snap-mandatory between hero and grid start; free scroll within the grid
+    // Free scroll within the grid; re-arm the hero snap only after the
+    // gesture fully settles (idle + finger lifted), never mid-scroll.
     if (y >= heroHeight) {
       scrollContainer.classList.add('snap-off');
     } else if (y < heroHeight * 0.5) {
-      scrollContainer.classList.remove('snap-off');
+      armSnap();
     }
   });
 
